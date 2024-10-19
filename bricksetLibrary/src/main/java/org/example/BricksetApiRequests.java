@@ -1,17 +1,20 @@
 package org.example;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import io.github.cdimascio.dotenv.Dotenv;
+
 public class BricksetApiRequests {
+
     Dotenv dotenv = Dotenv.configure()
             .directory(".")
             .ignoreIfMalformed()
@@ -22,12 +25,18 @@ public class BricksetApiRequests {
     private final String API_KEY = dotenv.get("API_KEY");
     private  final String USER_HASH = dotenv.get("USER_HASH");
 
+    private final HttpClient httpClient = HttpClient.newHttpClient();
 
+    /* TODO:
+        java.net http implement :: DONE,
+        Open feign,
+        nationalize client review,
+        spring feign
 
-    //java.net http, Open feign, nationalize client, spring feign
+     */
 
     private String buildQuery(Map<String, String> params) throws IOException {
-        String query = String.format("apiKey=%s&userHash=%s&params=",
+        String query = String.format("apiKey=%s&userHash=%s",
                 URLEncoder.encode(API_KEY, StandardCharsets.UTF_8),
                 URLEncoder.encode(USER_HASH, StandardCharsets.UTF_8));
 
@@ -36,36 +45,36 @@ public class BricksetApiRequests {
                 .map(entry -> String.format("'%s':'%s'", entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining(","));
 
-        return query + "{" + paramString + "}";
+        String encodedParams = URLEncoder.encode("{" + paramString + "}", StandardCharsets.UTF_8);
+
+        return query + "&params=" + encodedParams;
     }
 
     private String sendRequest(String query) {
-        try {
-            URL url = new URL(API_URL + "?" + query);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+     try {
+         URI uri = new URI(API_URL + "?" + query);
+         HttpRequest request = HttpRequest.newBuilder()
+                 .uri(uri)
+                 .GET()
+                 .build();
 
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
-                StringBuilder content = new StringBuilder();
-               while ((inputLine = in.readLine()) != null) {
-                   content.append(inputLine).append("\n");
-                }
-                in.close();
-                connection.disconnect();
-                return content.toString();
-            } else {
-                return "Error: Server returned HTTP response code: " + responseCode;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Exception occurred: " + e.getMessage();
-        }
+         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+         if (response.statusCode() == 200) {
+             return response.body();
+         } else {
+             return "Error: Server returned HTTP response code: " + response.statusCode();
+         }
+     } catch (IOException e) {
+         e.printStackTrace();
+         return "Exception occurred: " + e.getMessage();
+     } catch (InterruptedException e) {
+         throw new RuntimeException(e);
+     } catch (URISyntaxException e) {
+         throw new RuntimeException(e);
+     }
     }
 
-    // Main method that accepts a dynamic map of parameters
     public String getSet(Map<String, String> params) {
         try {
             String query = buildQuery(params);
@@ -76,14 +85,12 @@ public class BricksetApiRequests {
         }
     }
 
-    // Convenience method: get set by year only
     public String getSet(int year) {
         Map<String, String> params = new HashMap<>();
         params.put("year", String.valueOf(year));
         return getSet(params);
     }
 
-    // Convenience method: get set by year and theme
     public String getSet(int year, String theme) {
         Map<String, String> params = new HashMap<>();
         params.put("year", String.valueOf(year));
@@ -91,7 +98,6 @@ public class BricksetApiRequests {
         return getSet(params);
     }
 
-    // Convenience method: get set by year, theme, and name
     public String getSet(int year, String theme, String name) {
         Map<String, String> params = new HashMap<>();
         params.put("year", String.valueOf(year));
@@ -100,7 +106,6 @@ public class BricksetApiRequests {
         return getSet(params);
     }
 
-    // Convenience method: get set by year, theme, name, and category
     public String getSet(int year, String theme, String name, String category) {
         Map<String, String> params = new HashMap<>();
         params.put("year", String.valueOf(year));
