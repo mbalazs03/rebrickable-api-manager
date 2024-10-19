@@ -26,8 +26,11 @@ public class Main {
 
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~response4~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         String response4 = bricksetApiRequests.getSet(customParams);
-        String keyInfo = bricksetApiRequests.extractKeyInfoToFile(response4);
+        String keyInfo = bricksetApiRequests.extractKeyInfo(response4);
         System.out.println(keyInfo);
+
+        String outputFilePath = "sets_output.json";
+        bricksetApiRequests.extarctKeyInfoToFile(response4, outputFilePath);
 
 
     }

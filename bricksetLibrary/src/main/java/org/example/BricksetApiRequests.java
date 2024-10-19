@@ -1,5 +1,7 @@
 package org.example;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,6 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.cdimascio.dotenv.Dotenv;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -87,7 +92,7 @@ public class BricksetApiRequests {
         }
     }
 
-    public String extractKeyInfoToFile(String jsonResponse) {
+    public String extractKeyInfo(String jsonResponse) {
 
         StringBuilder keyInfo = new StringBuilder();
 
@@ -125,6 +130,50 @@ public class BricksetApiRequests {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void extarctKeyInfoToFile(String jsonResponse, String outputFilePath) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode setsArrayNode = objectMapper.createArrayNode();
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+
+            if (rootNode.path("status").asText().equals("success")) {
+                JsonNode setsArray = rootNode.path("sets");
+
+                for (JsonNode setInfo : setsArray) {
+                    ObjectNode setNode = objectMapper.createObjectNode();
+
+                    setNode.put("name", setInfo.has("name") ? setInfo.path("name").asText() : "Unknown Set");
+                    setNode.put("theme", setInfo.has("theme") ? setInfo.path("theme").asText() : "Unknown Theme");
+                    setNode.put("year", setInfo.has("year") ? setInfo.path("year").asInt() : -1);
+                    setNode.put("pieces", setInfo.has("pieces") ? setInfo.path("pieces").asInt() : -1);
+                    setNode.put("minifigs", setInfo.has("minifigs") ? setInfo.path("minifigs").asInt() : -1);
+                    setNode.put("rating", setInfo.has("rating") ? setInfo.path("rating").asDouble() : -1.0);
+                    setNode.put("reviewCount", setInfo.has("reviewCount") ? setInfo.path("reviewCount").asInt() : -1);
+
+                    setsArrayNode.add(setNode);
+                }
+
+                try (FileWriter fileWriter = new FileWriter(new File(outputFilePath))) {
+
+                    objectMapper.writerWithDefaultPrettyPrinter().writeValue(fileWriter, setsArrayNode);
+                    System.out.println("Data successfully written to " + outputFilePath);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                System.out.println("No data found");
+            }
+
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public String getSet(int year) {

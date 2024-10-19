@@ -1,0 +1,401 @@
+[ {
+  "name" : "Kai",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 19,
+  "minifigs" : 1,
+  "rating" : 3.6,
+  "reviewCount" : 8
+}, {
+  "name" : "Mountain Shrine",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 169,
+  "minifigs" : 2,
+  "rating" : 3.9,
+  "reviewCount" : 10
+}, {
+  "name" : "Ninja Ambush",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 71,
+  "minifigs" : 2,
+  "rating" : 3.6,
+  "reviewCount" : 24
+}, {
+  "name" : "Garmadon's Dark Fortress",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 518,
+  "minifigs" : 6,
+  "rating" : 4.2,
+  "reviewCount" : 6
+}, {
+  "name" : "Fire Temple",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 1174,
+  "minifigs" : 7,
+  "rating" : 4.5,
+  "reviewCount" : 6
+}, {
+  "name" : "Blacksmith Shop",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 189,
+  "minifigs" : 2,
+  "rating" : 3.9,
+  "reviewCount" : 5
+}, {
+  "name" : "Nuckal's ATV",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 174,
+  "minifigs" : 2,
+  "rating" : 3.2,
+  "reviewCount" : 2
+}, {
+  "name" : "Ninjago: The Board Game",
+  "theme" : "Games",
+  "year" : 2011,
+  "pieces" : 245,
+  "minifigs" : 10,
+  "rating" : 3.4,
+  "reviewCount" : 1
+}, {
+  "name" : "Kai's Blade Cycle",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 188,
+  "minifigs" : 2,
+  "rating" : 3.8,
+  "reviewCount" : 11
+}, {
+  "name" : "Rattlecopter",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 327,
+  "minifigs" : 3,
+  "rating" : 3.9,
+  "reviewCount" : 10
+}, {
+  "name" : "Ultra Sonic Raider",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 622,
+  "minifigs" : 6,
+  "rating" : 4.2,
+  "reviewCount" : 6
+}, {
+  "name" : "Spinner Battle Arena",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 418,
+  "minifigs" : 2,
+  "rating" : 3.3,
+  "reviewCount" : 0
+}, {
+  "name" : "Training Set",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 219,
+  "minifigs" : 1,
+  "rating" : 3.4,
+  "reviewCount" : 2
+}, {
+  "name" : "Kai ZX",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 21,
+  "minifigs" : 1,
+  "rating" : 3.7,
+  "reviewCount" : 3
+}, {
+  "name" : "Weapon Pack",
+  "theme" : "Ninjago",
+  "year" : 2012,
+  "pieces" : 73,
+  "minifigs" : 2,
+  "rating" : 4.0,
+  "reviewCount" : 2
+}, {
+  "name" : "Snake Showdown",
+  "theme" : "Juniors",
+  "year" : 2016,
+  "pieces" : 92,
+  "minifigs" : 2,
+  "rating" : 3.3,
+  "reviewCount" : 1
+}, {
+  "name" : "Shark Attack",
+  "theme" : "Juniors",
+  "year" : 2017,
+  "pieces" : 108,
+  "minifigs" : 3,
+  "rating" : 3.5,
+  "reviewCount" : 1
+}, {
+  "name" : "The Illager Raid",
+  "theme" : "Minecraft",
+  "year" : 2020,
+  "pieces" : 562,
+  "minifigs" : 5,
+  "rating" : 4.2,
+  "reviewCount" : 1
+}, {
+  "name" : "Dragon Fight",
+  "theme" : "Ninjago",
+  "year" : 2011,
+  "pieces" : 31,
+  "minifigs" : 1,
+  "rating" : 3.3,
+  "reviewCount" : 6
+}, {
+  "name" : "Kai Drifter",
+  "theme" : "Ninjago",
+  "year" : 2015,
+  "pieces" : 43,
+  "minifigs" : 1,
+  "rating" : 3.0,
+  "reviewCount" : 2
+}, {
+  "name" : "Kai's Mini Dragon",
+  "theme" : "Ninjago",
+  "year" : 2016,
+  "pieces" : 39,
+  "minifigs" : 1,
+  "rating" : 3.2,
+  "reviewCount" : 5
+}, {
+  "name" : "Fire Flight",
+  "theme" : "Ninjago",
+  "year" : 2019,
+  "pieces" : 54,
+  "minifigs" : 1,
+  "rating" : 3.4,
+  "reviewCount" : 2
+}, {
+  "name" : "Kai and Rapton's Temple Battle",
+  "theme" : "Ninjago",
+  "year" : 2023,
+  "pieces" : 47,
+  "minifigs" : 2,
+  "rating" : 3.9,
+  "reviewCount" : 3
+}, {
+  "name" : "NINJAGO Minifigure Set",
+  "theme" : "Ninjago",
+  "year" : 2019,
+  "pieces" : 59,
+  "minifigs" : 4,
+  "rating" : 3.8,
+  "reviewCount" : 2
+}, {
+  "name" : "Rahkshi Kaita Za Pack",
+  "theme" : "Bionicle",
+  "year" : 2003,
+  "pieces" : 162,
+  "minifigs" : -1,
+  "rating" : 0.0,
+  "reviewCount" : 0
+}, {
+  "name" : "Kai's Fire Mech",
+  "theme" : "Ninjago",
+  "year" : 2013,
+  "pieces" : 102,
+  "minifigs" : 2,
+  "rating" : 3.8,
+  "reviewCount" : 9
+}, {
+  "name" : "Kryptarium Prison Breakout",
+  "theme" : "Ninjago",
+  "year" : 2016,
+  "pieces" : 207,
+  "minifigs" : 5,
+  "rating" : 3.7,
+  "reviewCount" : 4
+}, {
+  "name" : "Ultra Stealth Raider",
+  "theme" : "Ninjago",
+  "year" : 2016,
+  "pieces" : 1093,
+  "minifigs" : 7,
+  "rating" : 4.3,
+  "reviewCount" : 1
+}, {
+  "name" : "Ninja Bike Chase",
+  "theme" : "Ninjago",
+  "year" : 2016,
+  "pieces" : 231,
+  "minifigs" : 3,
+  "rating" : 3.5,
+  "reviewCount" : 1
+}, {
+  "name" : "Misfortune's Keep",
+  "theme" : "Ninjago",
+  "year" : 2016,
+  "pieces" : 754,
+  "minifigs" : 6,
+  "rating" : 4.0,
+  "reviewCount" : 1
+}, {
+  "name" : "Spinjitzu Training",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 109,
+  "minifigs" : 2,
+  "rating" : 3.7,
+  "reviewCount" : 8
+}, {
+  "name" : "Master Falls",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 312,
+  "minifigs" : 4,
+  "rating" : 4.0,
+  "reviewCount" : 4
+}, {
+  "name" : "Water Strider",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 494,
+  "minifigs" : 4,
+  "rating" : 4.1,
+  "reviewCount" : 5
+}, {
+  "name" : "Fire Mech",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 944,
+  "minifigs" : 6,
+  "rating" : 4.0,
+  "reviewCount" : 0
+}, {
+  "name" : "Temple of the Ultimate Ultimate Weapon",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 1403,
+  "minifigs" : 8,
+  "rating" : 4.3,
+  "reviewCount" : 3
+}, {
+  "name" : "Destiny's Bounty",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 2295,
+  "minifigs" : 7,
+  "rating" : 4.6,
+  "reviewCount" : 9
+}, {
+  "name" : "NINJAGO City",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 4867,
+  "minifigs" : 19,
+  "rating" : 4.6,
+  "reviewCount" : 6
+}, {
+  "name" : "The Vermillion Attack",
+  "theme" : "Ninjago",
+  "year" : 2017,
+  "pieces" : 83,
+  "minifigs" : 3,
+  "rating" : 3.7,
+  "reviewCount" : 2
+}, {
+  "name" : "Dragon's Forge",
+  "theme" : "Ninjago",
+  "year" : 2017,
+  "pieces" : 1137,
+  "minifigs" : 6,
+  "rating" : 4.3,
+  "reviewCount" : 2
+}, {
+  "name" : "Piranha Attack",
+  "theme" : "The LEGO Ninjago Movie",
+  "year" : 2017,
+  "pieces" : 217,
+  "minifigs" : 4,
+  "rating" : 3.9,
+  "reviewCount" : 3
+}, {
+  "name" : "Kai - Spinjitzu Master",
+  "theme" : "Ninjago",
+  "year" : 2018,
+  "pieces" : 61,
+  "minifigs" : 1,
+  "rating" : 3.3,
+  "reviewCount" : 1
+}, {
+  "name" : "Katana V11",
+  "theme" : "Ninjago",
+  "year" : 2018,
+  "pieces" : 257,
+  "minifigs" : 2,
+  "rating" : 4.0,
+  "reviewCount" : 7
+}, {
+  "name" : "Kai - Dragon Master",
+  "theme" : "Ninjago",
+  "year" : 2018,
+  "pieces" : 92,
+  "minifigs" : 1,
+  "rating" : 3.6,
+  "reviewCount" : 2
+}, {
+  "name" : "Destiny's Wing",
+  "theme" : "Ninjago",
+  "year" : 2018,
+  "pieces" : 181,
+  "minifigs" : 2,
+  "rating" : 3.6,
+  "reviewCount" : 1
+}, {
+  "name" : "Firstbourne",
+  "theme" : "Ninjago",
+  "year" : 2018,
+  "pieces" : 882,
+  "minifigs" : 6,
+  "rating" : 4.5,
+  "reviewCount" : 3
+}, {
+  "name" : "Dragon Pit",
+  "theme" : "Ninjago",
+  "year" : 2018,
+  "pieces" : 1660,
+  "minifigs" : 9,
+  "rating" : 4.4,
+  "reviewCount" : 3
+}, {
+  "name" : "Spinjitzu Kai",
+  "theme" : "Ninjago",
+  "year" : 2019,
+  "pieces" : 97,
+  "minifigs" : 1,
+  "rating" : 4.0,
+  "reviewCount" : 1
+}, {
+  "name" : "Kai's Blade Cycle & Zane's Snowmobile",
+  "theme" : "Ninjago",
+  "year" : 2019,
+  "pieces" : 376,
+  "minifigs" : 4,
+  "rating" : 3.8,
+  "reviewCount" : 4
+}, {
+  "name" : "Cole's Earth Driller ",
+  "theme" : "Ninjago",
+  "year" : 2019,
+  "pieces" : 587,
+  "minifigs" : 4,
+  "rating" : 4.4,
+  "reviewCount" : 2
+}, {
+  "name" : "Monastery of Spinjitzu",
+  "theme" : "Ninjago",
+  "year" : 2019,
+  "pieces" : 1070,
+  "minifigs" : 8,
+  "rating" : 4.4,
+  "reviewCount" : 3
+} ]
