@@ -3,93 +3,49 @@ package org.example;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import feign.Feign;
+import feign.FeignException;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 import io.github.cdimascio.dotenv.Dotenv;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BricksetApiRequests {
 
-    Dotenv dotenv = Dotenv.configure()
-            .directory(".")
-            .ignoreIfMalformed()
-            .ignoreIfMissing()
-            .load();
+    Dotenv dotenv = Dotenv.configure().load();
 
-    private  final String API_URL = dotenv.get("API_URL");
+    private final String API_URL = dotenv.get("API_URL");
     private final String API_KEY = dotenv.get("API_KEY");
-    private  final String USER_HASH = dotenv.get("USER_HASH");
+    private final String USER_HASH = dotenv.get("USER_HASH");
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final BricksetClient bricksetClient = Feign.builder()
+            .encoder(new JacksonEncoder())
+            .decoder(new JacksonDecoder())
+            .target(BricksetClient.class, API_URL);
 
     /* TODO:
         java.net http implement :: DONE,
-        output --> json file :: STARTED
+        output --> json file :: DONE
         Open feign :: WAITLIST
         nationalize client review :: WAITLIST
         spring feign :: wAITLIST
      */
 
     private String buildQuery(Map<String, String> params) throws IOException {
-        assert USER_HASH != null;
-        assert API_KEY != null;
-        String query = String.format("apiKey=%s&userHash=%s",
-                URLEncoder.encode(API_KEY, StandardCharsets.UTF_8),
-                URLEncoder.encode(USER_HASH, StandardCharsets.UTF_8));
-
         String paramString = params.entrySet()
                 .stream()
                 .map(entry -> String.format("'%s':'%s'", entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining(","));
-
-        String encodedParams = URLEncoder.encode("{" + paramString + "}", StandardCharsets.UTF_8);
-        return query + "&params=" + encodedParams;
-    }
-
-    private String sendRequest(String query) {
-     try {
-         URI uri = new URI(API_URL + "?" + query);
-         HttpRequest request = HttpRequest.newBuilder()
-                 .uri(uri)
-                 .GET()
-                 .build();
-
-         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-         if (response.statusCode() == 200) {
-             return response.body();
-         } else {
-             return "Error: Server returned HTTP response code: " + response.statusCode();
-         }
-     } catch (IOException e) {
-         e.printStackTrace();
-         return "Exception occurred: " + e.getMessage();
-     } catch (InterruptedException | URISyntaxException e) {
-         throw new RuntimeException(e);
-     }
-    }
-
-    public String getSet(Map<String, String> params) {
-        try {
-            String query = buildQuery(params);
-            return sendRequest(query);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Exception occurred: " + e.getMessage();
-        }
+        String jsonParams = "{" + paramString + "}";
+        return URLEncoder.encode(jsonParams, StandardCharsets.UTF_8);
     }
 
     public String extractKeyInfo(String jsonResponse) {
@@ -156,7 +112,7 @@ public class BricksetApiRequests {
                     setsArrayNode.add(setNode);
                 }
 
-                try (FileWriter fileWriter = new FileWriter(new File(outputFilePath))) {
+                try (FileWriter fileWriter = new FileWriter(outputFilePath)) {
 
                     objectMapper.writerWithDefaultPrettyPrinter().writeValue(fileWriter, setsArrayNode);
                     System.out.println("Data successfully written to " + outputFilePath);
@@ -168,43 +124,39 @@ public class BricksetApiRequests {
                 System.out.println("No data found");
             }
 
-        } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public String getSet(int year) {
-        Map<String, String> params = new HashMap<>();
-        params.put("year", String.valueOf(year));
-        return getSet(params);
+    public String getSet(Map<String, String> params) {
+        try {
+            String query = buildQuery(params);
+            System.out.println("Constructed Query: " + query);  // Print the query for debugging
+            return getRequest(query);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Exception occurred: " + e.getMessage();
+        }
     }
 
-    public String getSet(int year, String theme) {
-        Map<String, String> params = new HashMap<>();
-        params.put("year", String.valueOf(year));
-        params.put("theme", theme);
-        return getSet(params);
-    }
+    public String getRequest(String query) {
+        System.out.println("Sending request with parameters: " + query);
 
-    public String getSet(int year, String theme, String name) {
-        Map<String, String> params = new HashMap<>();
-        params.put("year", String.valueOf(year));
-        params.put("theme", theme);
-        params.put("name", name);
-        return getSet(params);
+        try {
+            BricksetResponse response = bricksetClient.getSets(API_KEY, USER_HASH, query);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(response);
+            System.out.println("Raw API Response: " + jsonResponse);
+            return jsonResponse;
+        } catch (FeignException e) {
+            System.err.println("Error response from server: " + e.contentUTF8());
+            return "Error response from server: " + e.contentUTF8();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Exception occurred: " + e.getMessage();
+        }
     }
-
-    public String getSet(int year, String theme, String name, String category) {
-        Map<String, String> params = new HashMap<>();
-        params.put("year", String.valueOf(year));
-        params.put("theme", theme);
-        params.put("name", name);
-        params.put("category", category);
-        return getSet(params);
-    }
-
 }
 
