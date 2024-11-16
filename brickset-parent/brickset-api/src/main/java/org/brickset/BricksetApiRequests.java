@@ -33,8 +33,8 @@ public class BricksetApiRequests {
     /* TODO:
         java.net http implement :: DONE,
         output --> json file :: DONE
-        Open feign :: WAITLIST
-        nationalize client review :: WAITLIST
+        Open feign :: DONE
+        nationalize client review :: DONE
         spring feign :: wAITLIST
      */
 
@@ -158,4 +158,3 @@ public class BricksetApiRequests {
         }
     }
 }
-

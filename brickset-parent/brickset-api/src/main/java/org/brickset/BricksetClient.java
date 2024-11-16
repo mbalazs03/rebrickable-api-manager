@@ -9,5 +9,4 @@ public interface BricksetClient {
     BricksetResponse getSets(@Param("apiKey") String apiKey,
                    @Param("userHash") String userHash,
                    @Param("params") String params);
-
 }
