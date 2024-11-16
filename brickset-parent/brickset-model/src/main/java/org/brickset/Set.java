@@ -1,4 +1,4 @@
-package org.example;
+package org.brickset;
 
 public class Set {
     public int setId;

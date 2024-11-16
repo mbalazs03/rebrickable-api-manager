@@ -1,6 +1,5 @@
-package org.example;
+package org.brickset;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLEncoder;

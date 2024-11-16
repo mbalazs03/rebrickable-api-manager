@@ -1,4 +1,4 @@
-package org.example;
+package org.brickset;
 
 import feign.Param;
 import feign.RequestLine;
