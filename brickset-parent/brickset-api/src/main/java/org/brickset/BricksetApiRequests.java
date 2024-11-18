@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BricksetApiRequests {
 
     Dotenv dotenv = Dotenv.configure().load();
-
     private final String API_URL = dotenv.get("API_URL");
     private final String API_KEY = dotenv.get("API_KEY");
     private final String USER_HASH = dotenv.get("USER_HASH");
@@ -37,6 +36,8 @@ public class BricksetApiRequests {
         nationalize client review :: DONE
         spring feign :: wAITLIST
      */
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private String buildQuery(Map<String, String> params) throws IOException {
         String paramString = params.entrySet()
@@ -137,6 +138,16 @@ public class BricksetApiRequests {
         } catch (IOException e) {
             e.printStackTrace();
             return "Exception occurred: " + e.getMessage();
+        }
+    }
+
+    public BricksetResponse getSets(Map<String, String> params) {
+        try {
+            String query = buildQuery(params);
+            System.out.println("Sending request with parameters: " + query);
+            return bricksetClient.getSets(API_KEY, USER_HASH, query);
+        } catch (IOException e) {
+            throw new RuntimeException("Error building query: " + e.getMessage(), e);
         }
     }
 

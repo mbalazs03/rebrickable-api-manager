@@ -1,13 +1,13 @@
 package org.brickset;
 
-import java.util.List;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class BricksetResponse {
     private String status;
     private String message;
-    private List<Set> sets;
+    private JsonNode sets;
+    private JsonNode minifigures;
 
-    // Getters and Setters
     public String getStatus() {
         return status;
     }
@@ -24,12 +24,20 @@ public class BricksetResponse {
         this.message = message;
     }
 
-    public List<Set> getSets() {
+    public JsonNode getSets() {
         return sets;
     }
 
-    public void setSets(List<Set> sets) {
+    public void setSets(JsonNode sets) {
         this.sets = sets;
+    }
+
+    public JsonNode getMinifigures() {
+        return minifigures;
+    }
+
+    public void setMinifigures(JsonNode minifigures) {
+        this.minifigures = minifigures;
     }
 
     @Override
@@ -38,6 +46,7 @@ public class BricksetResponse {
                 "status='" + status + '\'' +
                 ", message='" + message + '\'' +
                 ", sets=" + sets +
+                ", minifigures=" + minifigures +
                 '}';
     }
 }
