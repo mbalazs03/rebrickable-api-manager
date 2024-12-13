@@ -30,12 +30,12 @@ public class RebrickableApiRequests {
                 .target(RebrickableClient.class, API_URL);
     }
 
-    public RebrickableResponse getSetByNumber(String setNum) {
+    public RebrickableResponse getSetByNumber(int set_num) {
         try {
-            if (setNum == null || setNum.trim().isEmpty()) {
+            if (set_num == 0) {
                 throw new IllegalArgumentException("Set number cannot be null or empty.");
             }
-            return rebrickableClient.getSetByNumber(setNum, API_KEY);
+            return rebrickableClient.getSetByNumber(set_num, API_KEY);
         } catch (Exception e) {
             System.err.println("Error fetching set by number: " + e.getMessage());
             throw new RuntimeException("Failed to fetch set by number.", e);

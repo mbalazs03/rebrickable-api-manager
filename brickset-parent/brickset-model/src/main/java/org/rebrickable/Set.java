@@ -1,29 +1,38 @@
 package org.rebrickable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Set {
-    private int setNum;
+    @JsonProperty("set_num")
+    private String set_num;
+
     private String name;
+
     private int year;
+
+    @JsonProperty("num_parts")
     private int numParts;
+
+    @JsonProperty("set_img_url")
     private String imageUrl;
 
     public Set() {
     }
 
-    public Set(int setNum, String name, int year, int numParts, String imageUrl) {
-        this.setNum = setNum;
+    public Set(String set_num, String name, int year, int numParts, String imageUrl) {
+        this.set_num = set_num;
         this.name = name;
         this.year = year;
         this.numParts = numParts;
         this.imageUrl = imageUrl;
     }
 
-    public int getSetNum() {
-        return setNum;
+    public String getSetNum() {
+        return set_num;
     }
 
-    public void setSetNum(int setNum) {
-        this.setNum = setNum;
+    public void setSetNum(String set_num) {
+        this.set_num = set_num;
     }
 
     public String getName() {
@@ -61,7 +70,7 @@ public class Set {
     @Override
     public String toString() {
         return "Set{" +
-                "setNum='" + setNum + '\'' +
+                "set_num='" + set_num + '\'' +
                 ", name='" + name + '\'' +
                 ", year=" + year +
                 ", numParts=" + numParts +

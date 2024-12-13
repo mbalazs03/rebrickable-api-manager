@@ -16,7 +16,9 @@ public class RebrickableApiService {
                 return new ArrayList<>();
             }
 
-            return response.getResults();
+            List<Set> sets = response.getResults();
+            System.out.println("Fetched " + sets.size() + " sets");
+            return sets;
 
         } catch (Exception e) {
             System.err.println("Error fetching sets: " + e.getMessage());

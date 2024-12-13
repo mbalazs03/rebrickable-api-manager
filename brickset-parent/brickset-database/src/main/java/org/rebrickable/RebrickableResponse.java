@@ -44,7 +44,7 @@ public class RebrickableResponse {
 
     @Override
     public String toString() {
-        return "BricksetResponse{" +
+        return "RebrickableResponse{" +
                 "count=" + count +
                 ", next='" + next + '\'' +
                 ", previous='" + previous + '\'' +

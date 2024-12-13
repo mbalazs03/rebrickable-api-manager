@@ -9,7 +9,7 @@ public interface RebrickableClient {
 
     @RequestLine("GET /lego/sets/{set_num}/")
     RebrickableResponse getSetByNumber(
-            @Param("set_num") String setNum,
+            @Param("set_num") int set_num,
             @Param("apiKey") String apiKey
     );
 
