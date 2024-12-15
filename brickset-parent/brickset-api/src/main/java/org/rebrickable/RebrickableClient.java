@@ -1,24 +1,33 @@
 package org.rebrickable;
 
-import feign.Headers;
-import feign.Param;
-import feign.RequestLine;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@Headers("Authorization: key {apiKey}")
+@FeignClient(name = "rebrickableClient", url = "https://rebrickable.com/api/v3")
 public interface RebrickableClient {
 
-    @RequestLine("GET /lego/sets/{set_num}/")
+    @GetMapping("/lego/sets/{set_num}/")
     RebrickableResponse getSetByNumber(
-            @Param("set_num") int set_num,
-            @Param("apiKey") String apiKey
+            @PathVariable("set_num") int setNum,
+            @RequestParam("key") String apiKey
     );
 
-    @RequestLine("GET /lego/sets/?search={search}&page_size=1000")
+    @GetMapping("/lego/sets/")
     RebrickableResponse searchSets(
-            @Param("search") String search,
-            @Param("apiKey") String apiKey
+            @RequestParam("search") String search,
+            @RequestParam("page") Integer page,
+            @RequestParam("page_size") Integer pageSize,
+            @RequestParam("ordering") String ordering,
+            @RequestParam("key") String apiKey
     );
 
-    @RequestLine("GET /lego/sets/?page_size=1000")
-    RebrickableResponse getAllSets(@Param("apiKey") String apiKey);
+    @GetMapping("/lego/sets/")
+    RebrickableResponse getAllSets(
+            @RequestParam("page") Integer page,
+            @RequestParam("page_size") Integer pageSize,
+            @RequestParam("ordering") String ordering,
+            @RequestParam("key") String apiKey
+    );
 }
