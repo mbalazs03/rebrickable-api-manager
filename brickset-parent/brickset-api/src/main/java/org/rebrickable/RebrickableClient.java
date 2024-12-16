@@ -17,9 +17,9 @@ public interface RebrickableClient {
     @GetMapping("/lego/sets/")
     RebrickableResponse searchSets(
             @RequestParam("search") String search,
-            @RequestParam("page") Integer page,
-            @RequestParam("page_size") Integer pageSize,
-            @RequestParam("ordering") String ordering,
+            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(value = "page_size", required = false, defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "ordering", required = false) String ordering,
             @RequestParam("key") String apiKey
     );
 

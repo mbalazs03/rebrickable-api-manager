@@ -1,33 +1,37 @@
 package org.rebrickable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class RebrickableResponse {
-    private int count;
-    private String next;
-    private String previous;
+    @JsonProperty("count")
+    private Integer count;
+
+    @JsonProperty("results")
     private List<Set> results;
 
-    public int getCount() { return count; }
-    public void setCount(int count) { this.count = count; }
+    // Getters and setters
+    public Integer getCount() {
+        return count;
+    }
 
-    public String getNext() { return next; }
-    public void setNext(String next) { this.next = next; }
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
-    public String getPrevious() { return previous; }
-    public void setPrevious(String previous) { this.previous = previous; }
+    public List<Set> getResults() {
+        return results;
+    }
 
-    public List<Set> getResults() { return results; }
-    public void setResults(List<Set> results) { this.results = results; }
+    public void setResults(List<Set> results) {
+        this.results = results;
+    }
 
     @Override
     public String toString() {
         return "RebrickableResponse{" +
                 "count=" + count +
-                ", next='" + next + '\'' +
-                ", previous='" + previous + '\'' +
                 ", results=" + results +
                 '}';
     }
