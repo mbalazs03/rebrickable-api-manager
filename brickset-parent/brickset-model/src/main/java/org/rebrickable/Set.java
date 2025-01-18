@@ -1,24 +1,21 @@
 package org.rebrickable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "sets")
 public class Set {
-    @JsonProperty("set_num")
+
+    @Id
+    private String id;
+
     private String setNum;
-
-    @JsonProperty("name")
     private String name;
-
-    @JsonProperty("year")
     private Integer year;
-
-    @JsonProperty("num_parts")
     private Integer numParts;
-
-    @JsonProperty("set_img_url")
     private String setImgUrl;
 
-    // Getters and setters
     public String getSetNum() {
         return setNum;
     }

@@ -3,12 +3,8 @@ package org.rebrickable.controller;
 import org.rebrickable.RebrickableApiService;
 import org.rebrickable.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +24,11 @@ public class SetController {
         if (query == null || query.trim().isEmpty()) {
             throw new IllegalArgumentException("Query parameter cannot be null or empty.");
         }
-        Map<String, String> params = new HashMap<>();
-        params.put("search", query);
-        return rebrickableApiService.getSets(params);
+        return rebrickableApiService.getSets(Map.of("search", query));
+    }
+
+    @PostMapping("/save")
+    public void saveSet(@RequestBody Set set) {
+        rebrickableApiService.saveSet(set);
     }
 }

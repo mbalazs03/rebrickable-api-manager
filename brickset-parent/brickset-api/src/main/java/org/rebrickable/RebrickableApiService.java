@@ -1,5 +1,6 @@
 package org.rebrickable;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +8,14 @@ import java.util.Map;
 
 @Service
 public class RebrickableApiService {
-    private final RebrickableApiRequests rebrickableApiRequests;
 
-    public RebrickableApiService(RebrickableApiRequests rebrickableApiRequests) {
+    private final RebrickableApiRequests rebrickableApiRequests;
+    private final SetRepository setRepository;
+
+    @Autowired
+    public RebrickableApiService(RebrickableApiRequests rebrickableApiRequests, SetRepository setRepository) {
         this.rebrickableApiRequests = rebrickableApiRequests;
+        this.setRepository = setRepository;
     }
 
     public RebrickableResponse getRawResponse(Map<String, String> params) {
@@ -40,13 +45,24 @@ public class RebrickableApiService {
         }
     }
 
-    public List<Set> getSets(Map<String, String> params) {
-        RebrickableResponse response = getRawResponse(params);
-        return response != null ? response.getResults() : new ArrayList<>();
-    }
+//    public List<Set> getSets(Map<String, String> params) {
+//        RebrickableResponse response = getRawResponse(params);
+//        return response != null ? response.getResults() : new ArrayList<>();
+//    }
 
     public Set getSetByNumber(int setNum) {
         RebrickableResponse response = getRawResponseByNumber(setNum);
         return response != null ? response.getResults().get(0) : null;
+    }
+
+    public List<Set> getSets(Map<String, String> params) {
+        if (params.containsKey("search")) {
+            return setRepository.findByNameContainingIgnoreCase(params.get("search"));
+        }
+        return setRepository.findAll();
+    }
+
+    public void saveSet(Set set) {
+        setRepository.save(set);
     }
 }
