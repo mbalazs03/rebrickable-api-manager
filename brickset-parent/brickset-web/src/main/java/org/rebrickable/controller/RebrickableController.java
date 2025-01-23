@@ -1,29 +1,40 @@
 package org.rebrickable.controller;
 
+import org.rebrickable.RebrickablePartResponse;
 import org.rebrickable.RebrickableResponse;
 import org.rebrickable.service.RebrickableService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.rebrickable.Set;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/rebrickable")
 public class RebrickableController {
 
     private final RebrickableService rebrickableService;
 
-    @Autowired
     public RebrickableController(RebrickableService rebrickableService) {
         this.rebrickableService = rebrickableService;
     }
 
-    @GetMapping("/lego/search")
-    public RebrickableResponse searchLegoSets(
-            @RequestParam("search") String search,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "page_size", required = false) Integer pageSize,
-            @RequestParam(value = "ordering", required = false) String ordering
-    ) {
-        return rebrickableService.searchLegoSets(search, page, pageSize, ordering);
+    @GetMapping("/sets/search")
+    public RebrickableResponse searchSets(
+            @RequestParam String query,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return rebrickableService.searchSets(query, page, pageSize);
+    }
+
+    @GetMapping("/sets/{setNum}/parts")
+    public RebrickablePartResponse getSetParts(
+            @PathVariable String setNum,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return rebrickableService.getSetParts(setNum, page, pageSize);
+    }
+
+    @PostMapping("/sets")
+    public void saveSet(@RequestBody Set set) {
+        rebrickableService.saveSet(set);
     }
 }
+

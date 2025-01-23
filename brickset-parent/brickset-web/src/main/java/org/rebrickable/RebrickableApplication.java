@@ -3,9 +3,10 @@ package org.rebrickable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "org.rebrickable")
 public class RebrickableApplication {
     public static void main(String[] args) {
         SpringApplication.run(RebrickableApplication.class, args);
     }
 }
+

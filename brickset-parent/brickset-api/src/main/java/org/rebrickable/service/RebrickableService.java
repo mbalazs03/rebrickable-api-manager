@@ -1,23 +1,29 @@
 package org.rebrickable.service;
 
-import org.rebrickable.RebrickableClient;
-import org.rebrickable.RebrickableResponse;
-import org.springframework.beans.factory.annotation.Value;
+import org.rebrickable.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RebrickableService {
 
-    private final RebrickableClient rebrickableClient;
+    private final RebrickableApiClient apiClient;
+    private final SetRepository setRepository;
 
-    @Value("${rebrickable.api.key}")
-    private String apiKey;
-
-    public RebrickableService(RebrickableClient rebrickableClient) {
-        this.rebrickableClient = rebrickableClient;
+    public RebrickableService(RebrickableApiClient apiClient, SetRepository setRepository) {
+        this.apiClient = apiClient;
+        this.setRepository = setRepository;
     }
 
-    public RebrickableResponse searchLegoSets(String searchTerm, Integer page, Integer pageSize, String ordering) {
-        return rebrickableClient.searchSets(searchTerm, page, pageSize, ordering, apiKey);
+    public RebrickableResponse searchSets(String query, int page, int pageSize) {
+        return apiClient.searchSets(query, page, pageSize);
+    }
+
+    public RebrickablePartResponse getSetParts(String setNum, int page, int pageSize) {
+        return apiClient.getSetParts(setNum, page, pageSize);
+    }
+
+    public void saveSet(Set set) {
+        setRepository.save(set);
     }
 }
+
