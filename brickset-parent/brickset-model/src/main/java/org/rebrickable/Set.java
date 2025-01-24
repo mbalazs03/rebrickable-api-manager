@@ -1,5 +1,6 @@
 package org.rebrickable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,10 +10,19 @@ public class Set {
     @Id
     private String id;
 
+    @JsonProperty("set_num")
     private String setNum;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("year")
     private Integer year;
+
+    @JsonProperty("num_parts")
     private Integer numParts;
+
+    @JsonProperty("set_image_url")
     private String setImgUrl;
 
     public String getSetNum() {

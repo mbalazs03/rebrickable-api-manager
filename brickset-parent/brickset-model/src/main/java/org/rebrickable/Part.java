@@ -1,5 +1,6 @@
 package org.rebrickable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,10 +10,19 @@ public class Part {
     @Id
     private String id;
 
+    @JsonProperty("part_num")
     private String partNum;
+
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("color")
     private String color;
+
+    @JsonProperty("quantity")
     private int quantity;
+
+    @JsonProperty("part_img_url")
     private String partImgUrl;
 
     public String getPartNum() {
