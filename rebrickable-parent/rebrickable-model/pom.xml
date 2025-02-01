@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.rebrickable</groupId>
-        <artifactId>brickset-parent</artifactId>
+        <artifactId>rebrickable-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>brickset-model</artifactId>
+    <artifactId>rebrickable-model</artifactId>
 
     <dependencies>
         <dependency>
