@@ -1,6 +1,7 @@
 package org.rebrickable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.rebrickable.dto.SetPart;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class RebrickablePartResponse {
     private int count;
 
     @JsonProperty("results")
-    private List<Part> results;
+    private List<SetPart> results;
 
     public int getCount() {
         return count;
@@ -20,11 +21,11 @@ public class RebrickablePartResponse {
         this.count = count;
     }
 
-    public List<Part> getResults() {
+    public List<SetPart> getResults() {
         return results;
     }
 
-    public void setResults(List<Part> results) {
+    public void setResults(List<SetPart> results) {
         this.results = results;
     }
 
@@ -36,4 +37,3 @@ public class RebrickablePartResponse {
                 '}';
     }
 }
-

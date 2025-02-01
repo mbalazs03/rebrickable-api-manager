@@ -1,5 +1,6 @@
 package org.rebrickable;
 
+import org.rebrickable.RebrickablePartResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -35,7 +36,7 @@ public class RebrickableApiClient {
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
+        System.out.println("Requesting URL: " + url);
         return restTemplate.getForObject(url, RebrickablePartResponse.class);
     }
 }
-
