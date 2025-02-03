@@ -16,23 +16,18 @@ public class PartDetail {
     public String getPartNum() {
         return partNum;
     }
-
     public void setPartNum(String partNum) {
         this.partNum = partNum;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public String getPartImgUrl() {
         return partImgUrl;
     }
-
     public void setPartImgUrl(String partImgUrl) {
         this.partImgUrl = partImgUrl;
     }

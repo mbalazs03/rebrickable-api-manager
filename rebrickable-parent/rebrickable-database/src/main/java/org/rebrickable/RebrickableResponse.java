@@ -3,10 +3,16 @@ package org.rebrickable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-
 public class RebrickableResponse {
+
     @JsonProperty("count")
     private Integer count;
+
+    @JsonProperty("next")
+    private String next;
+
+    @JsonProperty("previous")
+    private String previous;
 
     @JsonProperty("results")
     private List<Set> results;
@@ -17,6 +23,22 @@ public class RebrickableResponse {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public String getNext() {
+        return next;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
     }
 
     public List<Set> getResults() {
@@ -31,6 +53,8 @@ public class RebrickableResponse {
     public String toString() {
         return "RebrickableResponse{" +
                 "count=" + count +
+                ", next='" + next + '\'' +
+                ", previous='" + previous + '\'' +
                 ", results=" + results +
                 '}';
     }
