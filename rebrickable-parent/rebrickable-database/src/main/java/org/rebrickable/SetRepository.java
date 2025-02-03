@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface SetRepository extends MongoRepository<Set, String> {
     List<Set> findByNameContainingIgnoreCase(String name);
+
+    List<Set> findByOwnedTrue();
 }
