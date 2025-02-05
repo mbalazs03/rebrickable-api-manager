@@ -32,8 +32,8 @@ public class Set {
     @JsonProperty("last_modified_dt")
     private String lastModifiedDt;
 
-    @JsonProperty("owned")
-    private Boolean owned = false;
+    @JsonProperty("owner")
+    private String owner;
 
     public String getSetNum() {
         return setNum;
@@ -99,12 +99,12 @@ public class Set {
         this.lastModifiedDt = lastModifiedDt;
     }
 
-    public Boolean getOwned() {
-        return owned;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setOwned(Boolean owned) {
-        this.owned = owned;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class Set {
                 ", setImgUrl='" + setImgUrl + '\'' +
                 ", setUrl='" + setUrl + '\'' +
                 ", lastModifiedDt='" + lastModifiedDt + '\'' +
-                ", owned=" + owned +
+                ", owned=" + owner +
                 '}';
     }
 }
