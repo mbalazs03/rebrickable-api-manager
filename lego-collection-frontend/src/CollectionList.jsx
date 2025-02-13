@@ -39,11 +39,11 @@ const CollectionList = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {sets.map((set) => (
-                        <div key={set.setNum} className="bg-white shadow-md rounded p-4">
-                            <img src={set.setImgUrl} alt={set.name} className="w-full h-48 object-cover rounded"/>
+                        <div key={set['set_num']} className="bg-white shadow-md rounded p-4">
+                            <img src={set['set_img_url']} alt={set.name} className="w-full h-48 object-cover rounded"/>
                             <h2 className="text-xl font-semibold mt-2">{set.name}</h2>
                             <p className="text-gray-600">Év: {set.year}</p>
-                            <p className="text-gray-600">Részek száma: {set.numParts}</p>
+                            <p className="text-gray-600">Részek száma: {set['num_parts']}</p>
                         </div>
                     ))}
                 </div>
