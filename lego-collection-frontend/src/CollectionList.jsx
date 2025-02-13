@@ -7,11 +7,16 @@ const CollectionList = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        const authData = localStorage.getItem('auth');
+        if (!authData) {
+            setError({ message: "Nincs hitelesítési adat, kérlek jelentkezz be!"});
+            setLoading(false);
+            return;
+        }
+        const { username, password } = JSON.parse(authData);
+
         axios.get('/api/user/collection', {
-            auth: {
-                username: 'legoFan',
-                password: 'secret123'
-            }
+            auth: { username, password}
         })
             .then(response => {
                 setSets(response.data);
