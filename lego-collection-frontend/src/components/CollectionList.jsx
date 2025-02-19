@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CollectionList = () => {
     const [sets, setSets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const authData = localStorage.getItem('auth');
         if (!authData) {
-            setError({ message: "Nincs hitelesítési adat, kérlek jelentkezz be!"});
-            setLoading(false);
+            navigate('/login');
             return;
         }
+
         const { username, password } = JSON.parse(authData);
 
         axios.get('/api/user/collection', {
-            auth: { username, password}
+            auth: { username, password }
         })
-            .then(response => {
-                setSets(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, []);
+        .then(response => {
+            setSets(response.data);
+            setLoading(false);
+        })
+        .catch(error => {
+            setError(error);
+            setLoading(false);
+        });
+    }, [navigate]);
 
     if (loading) {
         return <div className="text-center mt-4">Betöltés...</div>;

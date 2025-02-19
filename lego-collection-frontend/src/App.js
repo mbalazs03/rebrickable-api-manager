@@ -1,18 +1,25 @@
 import React from 'react';
-import CollectionList from './CollectionList';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Registration from "./Registration";
-import Login from "./Login";
+import CollectionList from './components/CollectionList';
+import Registration from "./components/Registration";
+import Login from "./components/Login";
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
       <Router>
-          <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Registration />} />
-              <Route path="/collection" element={<CollectionList />} />
-          </Routes>
+        <Navbar />
+        <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/collection" element={
+                <ProtectedRoute>
+                <CollectionList />
+                </ProtectedRoute>
+            } />
+        </Routes>
       </Router>
   );
 }
