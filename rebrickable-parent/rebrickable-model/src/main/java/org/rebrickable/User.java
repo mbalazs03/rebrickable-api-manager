@@ -14,7 +14,7 @@ public class User {
     private String role;
 
     public User() {
-        this.role = "ROLE_USER";
+        this.role = "USER";
     }
 
     public String getId() {
@@ -47,5 +47,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
