@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Logout from './Logout';
 
 const Navbar = () => {
-    const isAuthenticated = localStorage.getItem('auth');
+    const isAuthenticated = localStorage.getItem('token');
     console.log("✅ Navbar is rendering...");
     return (
         <nav className="bg-gray-800 text-white p-4 flex justify-between">

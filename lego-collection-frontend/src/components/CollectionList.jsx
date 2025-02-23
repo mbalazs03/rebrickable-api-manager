@@ -9,16 +9,16 @@ const CollectionList = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const authData = localStorage.getItem('auth');
-        if (!authData) {
+        const token = localStorage.getItem('token');
+        if (!token) {
             navigate('/login');
             return;
         }
 
-        const { username, password } = JSON.parse(authData);
-
         axios.get('/api/user/collection', {
-            auth: { username, password }
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
         .then(response => {
             setSets(response.data);

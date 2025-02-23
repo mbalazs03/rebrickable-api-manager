@@ -9,7 +9,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (localStorage.getItem('auth')) {
+        if (localStorage.getItem('token')) {
             navigate('/collection');
         }
     }, [navigate]);
@@ -17,10 +17,9 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await axios.get('/api/user/collection', {
-                auth: { username, password }
-            });
-            localStorage.setItem('auth', JSON.stringify({ username, password }));
+            const response = await axios.post('/api/auth/login', { username, password });
+            const token = response.data.token;
+            localStorage.setItem('token', token);
             navigate('/collection');
         } catch (error) {
             console.error(error);
