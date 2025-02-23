@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from './components/AuthContext';
 import CollectionList from './components/CollectionList';
 import Registration from "./components/Registration";
 import Login from "./components/Login";
@@ -8,19 +9,21 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
+    <AuthProvider>
       <Router>
         <Navbar />
         <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Registration />} />
-            <Route path="/collection" element={
-                <ProtectedRoute>
-                <CollectionList />
-                </ProtectedRoute>
-            } />
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registration />} />
+          <Route path="/collection" element={
+            <ProtectedRoute>
+              <CollectionList />
+            </ProtectedRoute>
+          } />
         </Routes>
       </Router>
+    </AuthProvider>
   );
 }
 

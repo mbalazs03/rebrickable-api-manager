@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import axios from 'axios';
 
 const Login = () => {
@@ -7,19 +8,14 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            navigate('/collection');
-        }
-    }, [navigate]);
+    const { login } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('/api/auth/login', { username, password });
             const token = response.data.token;
-            localStorage.setItem('token', token);
+            login(token);
             navigate('/collection');
         } catch (error) {
             console.error(error);
