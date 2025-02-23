@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,10 +12,13 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
-@Component  
+@Component
 public class JwtUtil {
-    private static final String SECRET_KEY = "a_very_long_secret_key_that_is_at_least_32_chars";
-    private static final long EXPIRATION_TIME = 86400000; // 1 day
+    @Value("${rebrickable.secret.key2}")
+    private String SECRET_KEY;
+
+    @Value("${rebrickable.expiration}")
+    private long EXPIRATION_TIME;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());

@@ -8,10 +8,14 @@ public class User {
 
     @Id
     private String id;
-
     private String username;
     private String password;
     private String email;
+    private String role;
+
+    public User() {
+        this.role = "ROLE_USER";
+    }
 
     public String getId() {
         return id;
