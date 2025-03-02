@@ -59,6 +59,25 @@ const SearchLegoSets = () => {
         }
     };
 
+    const addToCollection = async (legoSet) => {
+      try {
+        const token = localStorage.getItem('token');
+        await axios.post('/api/rebrickable/sets', legoSet, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        await axios.put(`/api/user/collection/${legoSet.set_num}?owned=true`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        alert(`${legoSet.name} sikeresen hozzáadva a gyűjteményhez!`);
+      } catch (error) {
+        alert('Hiba történt a készlet hozzáadásakor');
+      }
+    };
+
     const nextPage = (e) => {
         if (hasNextPage) {
             handleSearch(e, page + 1);
@@ -234,6 +253,12 @@ const SearchLegoSets = () => {
                         <p className="text-gray-600">Készlet száma: {set.set_num}</p>
                         <p className="text-gray-600">Év: {set.year}</p>
                         <p className="text-gray-600">Részek száma: {set.num_parts}</p>
+                        <button 
+                            onClick={() => addToCollection(set)}
+                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mt-4"
+                        >
+                            Hozzáadás a gyűjteményhez
+                        </button>
                     </div>
                 ))}
             </div>

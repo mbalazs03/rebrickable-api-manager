@@ -30,6 +30,21 @@ const CollectionList = () => {
         });
     }, [navigate]);
 
+    const token = localStorage.getItem('token');
+
+    const removeFromCollection = async (legoSet) => {
+        try {
+            await axios.put(`/api/user/collection/${legoSet.set_num}?owned=false`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setSets(sets.filter(set => set['set_num'] !== legoSet.set_num));
+        } catch (error) {
+            console.error('Hiba történt a készlet eltávolításakor:', error);
+        }
+    };
+
     if (loading) {
         return <div className="text-center mt-4">Betöltés...</div>;
     }
@@ -51,6 +66,12 @@ const CollectionList = () => {
                             <h2 className="text-xl font-semibold mt-2">{set.name}</h2>
                             <p className="text-gray-600">Év: {set.year}</p>
                             <p className="text-gray-600">Részek száma: {set['num_parts']}</p>
+                            <button 
+                                onClick={() => removeFromCollection(set)}
+                                className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 mt-4"
+                            >
+                                Eltávolítás a gyűjteményből
+                            </button>
                         </div>
                     ))}
                 </div>
