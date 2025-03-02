@@ -6,6 +6,7 @@ import Registration from "./components/Registration";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminPanel from "./components/AdminPanel";
 
 function App() {
   return (
@@ -19,6 +20,11 @@ function App() {
           <Route path="/collection" element={
             <ProtectedRoute>
               <CollectionList />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminPanel />
             </ProtectedRoute>
           } />
         </Routes>

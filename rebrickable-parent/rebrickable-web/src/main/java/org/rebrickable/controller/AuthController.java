@@ -52,9 +52,13 @@ public class AuthController {
         User authenticatedUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        String roleWithoutPrefix = authenticatedUser.getRole().startsWith("ROLE_") 
+            ? authenticatedUser.getRole().substring(5) 
+            : authenticatedUser.getRole();
+
         return ResponseEntity.ok(Map.of(
             "token", jwt,
-            "role", authenticatedUser.getRole()
+            "role", roleWithoutPrefix
         ));
     }
 }

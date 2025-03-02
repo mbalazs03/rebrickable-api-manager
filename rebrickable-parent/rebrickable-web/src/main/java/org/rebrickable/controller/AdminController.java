@@ -30,6 +30,14 @@ public class AdminController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setRole("ADMIN");
         return userRepository.save(user);
-    } 
-    
+    }
+
+    @PostMapping("/revoke/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User revokeAdmin(@PathVariable String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setRole("USER");
+        return userRepository.save(user);
+    }
 }
