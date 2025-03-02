@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPanel from "./components/AdminPanel";
+import SearchLegoSets from "./components/SearchLegoSets";
 
 function App() {
   return (
@@ -25,6 +26,11 @@ function App() {
           <Route path="/admin" element={
             <ProtectedRoute>
               <AdminPanel />
+            </ProtectedRoute>
+          } />
+          <Route path="/search" element={
+            <ProtectedRoute>
+              <SearchLegoSets />
             </ProtectedRoute>
           } />
         </Routes>

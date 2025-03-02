@@ -18,10 +18,14 @@ public class RebrickableController {
 
     @GetMapping("/sets/search")
     public RebrickableResponse searchSets(
-            @RequestParam String query,
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String setNum,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer yearFrom,
+            @RequestParam(required = false) Integer yearTo,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        return rebrickableService.searchSets(query, page, pageSize);
+            @RequestParam(defaultValue = "12") int pageSize) {
+        return rebrickableService.searchSets(query, setNum, name, yearFrom, yearTo, page, pageSize);
     }
 
     @GetMapping("/sets/{setNum}/parts")

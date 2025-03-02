@@ -18,6 +18,9 @@ const Navbar = () => {
                         <Link to="/collection" className="mr-4 hover:text-gray-300">
                             Gyűjtemény
                         </Link>
+                        <Link to="/search" className="mr-4 hover:text-gray-300">
+                            Keresés
+                        </Link>
                         {role === "ADMIN" && (
                             <Link to="/admin" className="mr-4 hover:text-gray-300">
                                 Admin Panel
