@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
 const Navbar = () => {
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, role, logout } = useAuth();
 
     const handleLogout = () => {
         logout();
@@ -18,6 +18,11 @@ const Navbar = () => {
                         <Link to="/collection" className="mr-4 hover:text-gray-300">
                             Gyűjtemény
                         </Link>
+                        {role === "ADMIN" && (
+                            <Link to="/admin" className="mr-4 hover:text-gray-300">
+                                Admin Panel
+                            </Link>
+                        )}
                         <button 
                             onClick={handleLogout}
                             className="hover:text-gray-300"

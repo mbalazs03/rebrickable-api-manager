@@ -48,7 +48,13 @@ public class AuthController {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String jwt = jwtUtil.generateToken(userDetails);
+        
+        User authenticatedUser = userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return ResponseEntity.ok(Map.of("token", jwt));
+        return ResponseEntity.ok(Map.of(
+            "token", jwt,
+            "role", authenticatedUser.getRole()
+        ));
     }
 }
