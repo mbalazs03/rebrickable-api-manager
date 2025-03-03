@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SetCard from './SetCard';
+import Pagination from './Pagination';
 
 const SearchLegoSets = () => {
     const [searchCriteria, setSearchCriteria] = useState({
@@ -79,99 +80,8 @@ const SearchLegoSets = () => {
       }
     };
 
-    const nextPage = (e) => {
-        if (hasNextPage) {
-            handleSearch(e, page + 1);
-        }
-    };
-
-    const prevPage = (e) => {
-        if (hasPrevPage) {
-            handleSearch(e, page - 1);
-        }
-    };
-
-    const goToPage = (e, pageNum) => {
-        if (pageNum >= 1 && pageNum <= Math.ceil(totalResults / pageSize)) {
-            handleSearch(e, pageNum);
-        }
-    };
-
-    const renderPagination = () => {
-        if (totalResults === 0) return null;
-
-        const totalPages = Math.ceil(totalResults / pageSize);
-        const pageNumbers = [];
-        const maxVisiblePages = 5;
-        
-        let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-        
-        if (endPage - startPage + 1 < maxVisiblePages) {
-            startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-
-        for (let i = startPage; i <= endPage; i++) {
-            pageNumbers.push(i);
-        }
-
-        return (
-            <div className="flex justify-center mt-8 space-x-2">
-                <button 
-                    onClick={prevPage}
-                    disabled={!hasPrevPage}
-                    className={`px-4 py-2 rounded ${!hasPrevPage ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-                >
-                    Előző
-                </button>
-                
-                {startPage > 1 && (
-                    <>
-                        <button
-                            onClick={(e) => goToPage(e, 1)}
-                            className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
-                        >
-                            1
-                        </button>
-                        {startPage > 2 && <span className="px-4 py-2">...</span>}
-                    </>
-                )}
-
-                {pageNumbers.map(num => (
-                    <button
-                        key={num}
-                        onClick={(e) => goToPage(e, num)}
-                        className={`px-4 py-2 rounded ${
-                            num === page 
-                                ? 'bg-blue-700 text-white' 
-                                : 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }`}
-                    >
-                        {num}
-                    </button>
-                ))}
-
-                {endPage < totalPages && (
-                    <>
-                        {endPage < totalPages - 1 && <span className="px-4 py-2">...</span>}
-                        <button
-                            onClick={(e) => goToPage(e, totalPages)}
-                            className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
-                        >
-                            {totalPages}
-                        </button>
-                    </>
-                )}
-
-                <button 
-                    onClick={nextPage}
-                    disabled={!hasNextPage}
-                    className={`px-4 py-2 rounded ${!hasNextPage ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-                >
-                    Következő
-                </button>
-            </div>
-        );
+    const handlePageChange = (newPage) => {
+        handleSearch(null, newPage);
     };
 
     return (
@@ -252,7 +162,14 @@ const SearchLegoSets = () => {
                 ))}
             </div>
 
-            {renderPagination()}
+            <Pagination 
+                currentPage={page}
+                totalResults={totalResults}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                hasNextPage={hasNextPage}
+                hasPrevPage={hasPrevPage}
+            />
         </div>
     );
 };
