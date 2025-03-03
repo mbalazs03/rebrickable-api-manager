@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPanel from "./components/AdminPanel";
 import SearchLegoSets from "./components/SearchLegoSets";
+import SetDetails from "./components/SetDetails";
 
 function App() {
   return (
@@ -31,6 +32,11 @@ function App() {
           <Route path="/search" element={
             <ProtectedRoute>
               <SearchLegoSets />
+            </ProtectedRoute>
+          } />
+          <Route path="/set/:setNum" element={
+            <ProtectedRoute>
+              <SetDetails />
             </ProtectedRoute>
           } />
         </Routes>

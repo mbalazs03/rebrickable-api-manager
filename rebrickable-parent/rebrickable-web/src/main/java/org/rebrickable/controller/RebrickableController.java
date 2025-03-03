@@ -16,6 +16,11 @@ public class RebrickableController {
         this.rebrickableService = rebrickableService;
     }
 
+    @GetMapping("/sets/{setNum}")
+    public Set getSetDetails(@PathVariable String setNum) {
+        return rebrickableService.getSetDetails(setNum);
+    }
+
     @GetMapping("/sets/search")
     public RebrickableResponse searchSets(
             @RequestParam(required = false) String query,

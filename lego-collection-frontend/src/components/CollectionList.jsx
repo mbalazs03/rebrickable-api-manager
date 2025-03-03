@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import SetCard from './SetCard';
 
 const CollectionList = () => {
     const [sets, setSets] = useState([]);
@@ -61,18 +62,7 @@ const CollectionList = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {sets.map((set) => (
-                        <div key={set['set_num']} className="bg-white shadow-md rounded p-4">
-                            <img src={set['set_img_url']} alt={set.name} className="w-full h-48 object-cover rounded"/>
-                            <h2 className="text-xl font-semibold mt-2">{set.name}</h2>
-                            <p className="text-gray-600">Év: {set.year}</p>
-                            <p className="text-gray-600">Részek száma: {set['num_parts']}</p>
-                            <button 
-                                onClick={() => removeFromCollection(set)}
-                                className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 mt-4"
-                            >
-                                Eltávolítás a gyűjteményből
-                            </button>
-                        </div>
+                        <SetCard key={set['set_num']} set={set} onRemoveFromCollection={removeFromCollection}/>
                     ))}
                 </div>
             )}

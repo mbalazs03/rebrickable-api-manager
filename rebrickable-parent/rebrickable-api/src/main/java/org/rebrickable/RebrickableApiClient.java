@@ -18,6 +18,15 @@ public class RebrickableApiClient {
         this.apiKey = apiKey;
     }
 
+    public Set getSetDetails(String setNum) {
+        String url = UriComponentsBuilder.fromHttpUrl(baseUrl + "/lego/sets/" + setNum + "/")
+                .queryParam("key", apiKey)
+                .build()
+                .toUriString();
+
+        return restTemplate.getForObject(url, Set.class);
+    }
+
     public RebrickableResponse searchSets(String query, String setNum, String name, Integer yearFrom, Integer yearTo, int page, int pageSize) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/lego/sets/")
                 .queryParam("key", apiKey)

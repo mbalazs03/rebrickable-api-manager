@@ -14,6 +14,10 @@ public class RebrickableService {
         this.setRepository = setRepository;
     }
 
+    public Set getSetDetails(String setNum) {
+        return apiClient.getSetDetails(setNum);
+    }
+
     public RebrickableResponse searchSets(String query, String setNum, String name, Integer yearFrom, Integer yearTo, int page, int pageSize) {
         return apiClient.searchSets(query, setNum, name, yearFrom, yearTo, page, pageSize);
     }

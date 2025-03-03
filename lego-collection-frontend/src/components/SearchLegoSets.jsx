@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import SetCard from './SetCard';
 
 const SearchLegoSets = () => {
     const [searchCriteria, setSearchCriteria] = useState({
@@ -247,19 +248,7 @@ const SearchLegoSets = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {results.map((set) => (
-                    <div key={set.set_num} className="bg-white shadow-md rounded p-4">
-                        <img src={set.set_img_url} alt={set.name} className="w-full h-48 object-cover rounded"/>
-                        <h2 className="text-xl font-semibold mt-2">{set.name}</h2>
-                        <p className="text-gray-600">Készlet száma: {set.set_num}</p>
-                        <p className="text-gray-600">Év: {set.year}</p>
-                        <p className="text-gray-600">Részek száma: {set.num_parts}</p>
-                        <button 
-                            onClick={() => addToCollection(set)}
-                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mt-4"
-                        >
-                            Hozzáadás a gyűjteményhez
-                        </button>
-                    </div>
+                    <SetCard key={set.set_num} set={set} onAddToCollection={addToCollection}/>
                 ))}
             </div>
 
