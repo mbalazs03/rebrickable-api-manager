@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import SetCard from './SetCard';
+import SetCard from '../common/SetCard';
+import Pagination from '../common/Pagination';
 
 const CollectionList = () => {
     const [sets, setSets] = useState([]);

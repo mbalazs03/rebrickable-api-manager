@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const AdminPanel = () => {

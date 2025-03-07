@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SetCard from './SetCard';
-import Pagination from './Pagination';
+import SetCard from '../common/SetCard';
+import Pagination from '../common/Pagination';
 
 const SearchLegoSets = () => {
     const [searchCriteria, setSearchCriteria] = useState({
