@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.http.HttpStatus;
+import java.time.Duration;
+import java.time.Instant;
 
 @Component
 public class RebrickableApiClient {
@@ -12,10 +15,62 @@ public class RebrickableApiClient {
     private final RestTemplate restTemplate;
     private final String apiKey;
     private final String baseUrl = "https://rebrickable.com/api/v3";
+    private Instant lastRequestTime = Instant.now();
+    private static final Duration MIN_REQUEST_INTERVAL = Duration.ofSeconds(1);
 
     public RebrickableApiClient(RestTemplate restTemplate, @Value("${rebrickable.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
+    }
+
+    private void waitForRateLimit() {
+        Instant now = Instant.now();
+        Duration timeSinceLastRequest = Duration.between(lastRequestTime, now);
+        if (timeSinceLastRequest.compareTo(MIN_REQUEST_INTERVAL) < 0) {
+            try {
+                Thread.sleep(MIN_REQUEST_INTERVAL.minus(timeSinceLastRequest).toMillis());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        lastRequestTime = Instant.now();
+    }
+
+    private <T> T executeWithRetry(ThrowingSupplier<T> request) {
+        while (true) {
+            try {
+                waitForRateLimit();
+                return request.get();
+            } catch (HttpClientErrorException e) {
+                if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                    String retryAfter = e.getResponseHeaders().getFirst("Retry-After");
+                    if (retryAfter != null) {
+                        try {
+                            int seconds = Integer.parseInt(retryAfter);
+                            try {
+                                Thread.sleep(seconds * 1000L);
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                            }
+                            continue;
+                        } catch (NumberFormatException nfe) {
+                            try {
+                                Thread.sleep(MIN_REQUEST_INTERVAL.toMillis());
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                            }
+                            continue;
+                        }
+                    }
+                }
+                throw e;
+            }
+        }
+    }
+
+    @FunctionalInterface
+    private interface ThrowingSupplier<T> {
+        T get();
     }
 
     public Set getSetDetails(String setNum) {
@@ -24,7 +79,7 @@ public class RebrickableApiClient {
                 .build()
                 .toUriString();
 
-        return restTemplate.getForObject(url, Set.class);
+        return executeWithRetry(() -> restTemplate.getForObject(url, Set.class));
     }
 
     public RebrickableResponse searchSets(String query, String setNum, String name, Integer yearFrom, Integer yearTo, int page, int pageSize) {
@@ -52,7 +107,7 @@ public class RebrickableApiClient {
         String url = builder.build().toUriString();
         System.out.println("Requesting URL: " + url);
 
-        try {
+        return executeWithRetry(() -> {
             RebrickableResponse response = restTemplate.getForObject(url, RebrickableResponse.class);
             if (response != null) {
                 if (response.getNext() != null) {
@@ -63,10 +118,7 @@ public class RebrickableApiClient {
                 }
             }
             return response;
-        } catch (HttpClientErrorException e) {
-            System.out.println("Error: " + e.getMessage());
-            return new RebrickableResponse();
-        }
+        });
     }
 
     public RebrickablePartResponse getSetParts(String setNum, int page, int pageSize) {
@@ -77,6 +129,6 @@ public class RebrickableApiClient {
                 .build()
                 .toUriString();
         System.out.println("Requesting URL: " + url);
-        return restTemplate.getForObject(url, RebrickablePartResponse.class);
+        return executeWithRetry(() -> restTemplate.getForObject(url, RebrickablePartResponse.class));
     }
 }
