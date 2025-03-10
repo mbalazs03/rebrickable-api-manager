@@ -47,7 +47,7 @@ public class UserCollectionController {
             }
 
             String username = authentication.getName();
-            List<BuildableSetResponse> buildableSets = userCollectionService.getBuildableSets(username, page, pageSize);
+            List<BuildableSetResponse> buildableSets = userCollectionService.getBuildableSets(username, null, null, null, null, null, page, pageSize);
             return ResponseEntity.ok(buildableSets);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

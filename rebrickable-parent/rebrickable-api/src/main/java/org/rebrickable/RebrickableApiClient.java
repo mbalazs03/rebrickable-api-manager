@@ -15,31 +15,30 @@ public class RebrickableApiClient {
     private final RestTemplate restTemplate;
     private final String apiKey;
     private final String baseUrl = "https://rebrickable.com/api/v3";
-    private Instant lastRequestTime = Instant.now();
     private static final Duration MIN_REQUEST_INTERVAL = Duration.ofSeconds(1);
+    private Instant lastApiCall = Instant.now();
+    private static final Duration RATE_LIMIT = Duration.ofSeconds(1);
 
     public RebrickableApiClient(RestTemplate restTemplate, @Value("${rebrickable.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
     }
 
-    private void waitForRateLimit() {
+    private void respectRateLimit() {
         Instant now = Instant.now();
-        Duration timeSinceLastRequest = Duration.between(lastRequestTime, now);
-        if (timeSinceLastRequest.compareTo(MIN_REQUEST_INTERVAL) < 0) {
+        long waitTime = RATE_LIMIT.minus(Duration.between(lastApiCall, now)).toMillis();
+        if (waitTime > 0) {
             try {
-                Thread.sleep(MIN_REQUEST_INTERVAL.minus(timeSinceLastRequest).toMillis());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+                Thread.sleep(waitTime);
+            } catch (InterruptedException ignored) {}
         }
-        lastRequestTime = Instant.now();
+        lastApiCall = Instant.now();
     }
 
     private <T> T executeWithRetry(ThrowingSupplier<T> request) {
         while (true) {
             try {
-                waitForRateLimit();
+                respectRateLimit();
                 return request.get();
             } catch (HttpClientErrorException e) {
                 if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {

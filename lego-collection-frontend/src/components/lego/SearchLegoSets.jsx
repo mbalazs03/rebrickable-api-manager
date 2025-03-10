@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import SetCard from '../common/SetCard';
 import Pagination from '../common/Pagination';
 
 const SearchLegoSets = () => {
     const [searchCriteria, setSearchCriteria] = useState({
-        query: '',
-        setNum: '',
-        name: '',
-        yearFrom: '',
-        yearTo: ''
+        query: '', setNum: '', name: '', yearFrom: '', yearTo: ''
     });
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -18,14 +14,13 @@ const SearchLegoSets = () => {
     const [totalResults, setTotalResults] = useState(0);
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPrevPage, setHasPrevPage] = useState(false);
+    const [showBuildable, setShowBuildable] = useState(false);
+
     const pageSize = 12;
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setSearchCriteria(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setSearchCriteria(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSearch = async (e, newPage = 1) => {
@@ -35,9 +30,10 @@ const SearchLegoSets = () => {
         setPage(newPage);
 
         const token = localStorage.getItem('token');
+        const endpoint = showBuildable ? '/api/rebrickable/sets/buildable' : '/api/rebrickable/sets/search';
 
         try {
-            const response = await axios.get(`/api/rebrickable/sets/search`, {
+            const response = await axios.get(endpoint, {
                 params: {
                     ...searchCriteria,
                     yearFrom: searchCriteria.yearFrom || null,
@@ -49,35 +45,27 @@ const SearchLegoSets = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            
-            setResults(response.data.results);
-            setTotalResults(response.data.count);
+
+            setResults(response.data.results || response.data);
+            setTotalResults(response.data.count || response.data.length);
             setHasNextPage(response.data.next !== null);
             setHasPrevPage(response.data.previous !== null);
         } catch (error) {
-            setError('Hiba történt a lego készletek keresésekor');
+            setError('Hiba történt a LEGO készletek keresésekor');
         } finally {
             setLoading(false);
         }
     };
 
     const addToCollection = async (legoSet) => {
-      try {
-        const token = localStorage.getItem('token');
-        await axios.post('/api/rebrickable/sets', legoSet, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        await axios.put(`/api/user/collection/${legoSet.set_num}?owned=true`, {}, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        alert(`${legoSet.name} sikeresen hozzáadva a gyűjteményhez!`);
-      } catch (error) {
-        alert('Hiba történt a készlet hozzáadásakor');
-      }
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('/api/rebrickable/sets', legoSet, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.put(`/api/user/collection/${legoSet.set_num}?owned=true`, {}, { headers: { Authorization: `Bearer ${token}` } });
+            alert(`${legoSet.name} sikeresen hozzáadva a gyűjteményhez!`);
+        } catch (error) {
+            alert('Hiba történt a készlet hozzáadásakor');
+        }
     };
 
     const handlePageChange = (newPage) => {
@@ -89,66 +77,17 @@ const SearchLegoSets = () => {
             <h1 className="text-3xl font-bold mb-4">LEGO Készletek Keresése</h1>
             <form onSubmit={handleSearch} className="mb-8 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Általános keresés</label>
-                        <input
-                            type="text"
-                            name="query"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                            value={searchCriteria.query}
-                            onChange={handleInputChange}
-                            placeholder="Általános keresés..."
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Készlet száma</label>
-                        <input
-                            type="text"
-                            name="setNum"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                            value={searchCriteria.setNum}
-                            onChange={handleInputChange}
-                            placeholder="Készlet száma..."
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Készlet neve</label>
-                        <input
-                            type="text"
-                            name="name"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                            value={searchCriteria.name}
-                            onChange={handleInputChange}
-                            placeholder="Készlet neve..."
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Év (-tól)</label>
-                        <input
-                            type="number"
-                            name="yearFrom"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                            value={searchCriteria.yearFrom}
-                            onChange={handleInputChange}
-                            placeholder="Év -tól..."
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Év (-ig)</label>
-                        <input
-                            type="number"
-                            name="yearTo"
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                            value={searchCriteria.yearTo}
-                            onChange={handleInputChange}
-                            placeholder="Év -ig..."
-                        />
-                    </div>
+                    <input type="text" name="query" value={searchCriteria.query} onChange={handleInputChange} placeholder="Általános keresés" className="border p-2 rounded" />
+                    <input type="text" name="setNum" value={searchCriteria.setNum} onChange={handleInputChange} placeholder="Készlet száma" className="border rounded p-2" />
+                    <input type="text" name="name" value={searchCriteria.name} onChange={handleInputChange} placeholder="Készlet neve" className="border rounded p-2" />
+                    <input type="number" name="yearFrom" value={searchCriteria.yearFrom} onChange={handleInputChange} placeholder="Év (-tól)" className="border rounded p-2" />
+                    <input type="number" name="yearTo" value={searchCriteria.yearTo} onChange={handleInputChange} placeholder="Év (-ig)" className="border rounded p-2" />
                 </div>
-                <button 
-                    type="submit" 
-                    className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mt-4"
-                >
+                <label className="flex items-center">
+                    <input type="checkbox" checked={showBuildable} onChange={() => setShowBuildable(prev => !prev)} />
+                    <span className="ml-2">Építhetőség mutatása</span>
+                </label>
+                <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mt-4">
                     Keresés
                 </button>
             </form>
@@ -157,12 +96,18 @@ const SearchLegoSets = () => {
             {error && <p className="text-center text-red-500">{error}</p>}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {results.map((set) => (
-                    <SetCard key={set.set_num} set={set} onAddToCollection={addToCollection}/>
+                {results.map(set => (
+                    <SetCard
+                        key={set.set_num || set.set.set_num}
+                        set={set.set || set}
+                        completion={set.completionPercentage}
+                        missingParts={set.missingParts}
+                        onAddToCollection={addToCollection}
+                    />
                 ))}
             </div>
 
-            <Pagination 
+            <Pagination
                 currentPage={page}
                 totalResults={totalResults}
                 pageSize={pageSize}
