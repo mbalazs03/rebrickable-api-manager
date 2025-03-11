@@ -5,25 +5,20 @@ import org.rebrickable.RebrickablePartResponse;
 import org.rebrickable.RebrickableResponse;
 import org.rebrickable.service.RebrickableService;
 import org.rebrickable.Set;
-import org.rebrickable.service.UserCollectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/rebrickable")
 public class RebrickableController {
 
-    private final UserCollectionService userCollectionService;
-
     private final RebrickableService rebrickableService;
 
-    public RebrickableController(UserCollectionService userCollectionService, RebrickableService rebrickableService) {
-        this.userCollectionService = userCollectionService;
+    public RebrickableController(RebrickableService rebrickableService) {
         this.rebrickableService = rebrickableService;
     }
 
