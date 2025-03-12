@@ -3,17 +3,24 @@ package org.rebrickable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Document(collection = "sets")
 public class Set {
 
     @Id
+    @NotBlank(message = "Set number cannot be blank")
     @JsonProperty("set_num")
     private String setNum;
 
+    @NotBlank(message = "Name cannot be blank")
     @JsonProperty("name")
     private String name;
 
+    @NotNull(message = "Year cannot be null")
+    @Min(value = 1900, message = "Year must be after 1900")
     @JsonProperty("year")
     private Integer year;
 

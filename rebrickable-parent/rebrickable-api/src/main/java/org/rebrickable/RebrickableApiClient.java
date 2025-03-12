@@ -8,6 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.HttpStatus;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 @Component
 public class RebrickableApiClient {
@@ -42,7 +43,7 @@ public class RebrickableApiClient {
                 return request.get();
             } catch (HttpClientErrorException e) {
                 if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
-                    String retryAfter = e.getResponseHeaders().getFirst("Retry-After");
+                    String retryAfter = Objects.requireNonNull(e.getResponseHeaders()).getFirst("Retry-After");
                     if (retryAfter != null) {
                         try {
                             int seconds = Integer.parseInt(retryAfter);
