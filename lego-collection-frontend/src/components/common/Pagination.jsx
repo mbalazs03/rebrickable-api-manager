@@ -1,87 +1,96 @@
-import React from 'react';
+"use client"
+import {
+  Pagination as PaginationRoot,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination"
 
-const Pagination = ({ 
-    currentPage, 
-    totalResults, 
-    pageSize, 
-    onPageChange,
-    hasNextPage,
-    hasPrevPage 
-}) => {
-    const totalPages = Math.ceil(totalResults / pageSize);
-    const maxVisiblePages = 5;
-    
-    if (totalResults === 0) return null;
-    
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
-    if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
+const Pagination = ({ currentPage, totalResults, pageSize, onPageChange, hasNextPage, hasPrevPage }) => {
+  const totalPages = Math.ceil(totalResults / pageSize)
+  const maxVisiblePages = 5
 
-    const pageNumbers = [];
-    for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-    }
+  if (totalResults === 0) return null
 
-    return (
-        <div className="flex justify-center mt-8 space-x-2">
-            <button 
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={!hasPrevPage}
-                className={`px-4 py-2 rounded ${!hasPrevPage ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-            >
-                Előző
-            </button>
-            
-            {startPage > 1 && (
-                <>
-                    <button
-                        onClick={() => onPageChange(1)}
-                        className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
-                    >
-                        1
-                    </button>
-                    {startPage > 2 && <span className="px-4 py-2">...</span>}
-                </>
-            )}
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
+  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
 
-            {pageNumbers.map(num => (
-                <button
-                    key={num}
-                    onClick={() => onPageChange(num)}
-                    className={`px-4 py-2 rounded ${
-                        num === currentPage 
-                            ? 'bg-blue-700 text-white' 
-                            : 'bg-blue-500 hover:bg-blue-600 text-white'
-                    }`}
-                >
-                    {num}
-                </button>
-            ))}
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1)
+  }
 
-            {endPage < totalPages && (
-                <>
-                    {endPage < totalPages - 1 && <span className="px-4 py-2">...</span>}
-                    <button
-                        onClick={() => onPageChange(totalPages)}
-                        className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
-                    >
-                        {totalPages}
-                    </button>
-                </>
-            )}
+  const pageNumbers = []
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i)
+  }
 
-            <button 
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={!hasNextPage}
-                className={`px-4 py-2 rounded ${!hasNextPage ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-            >
-                Következő
-            </button>
-        </div>
-    );
-};
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="text-sm text-muted-foreground">
+        Összesen {totalResults} találat, {currentPage} / {totalPages} oldal
+      </div>
+      <PaginationRoot>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => onPageChange(currentPage - 1)}
+              className={!hasPrevPage ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              aria-disabled={!hasPrevPage}
+            />
+          </PaginationItem>
 
-export default Pagination; 
+          {startPage > 1 && (
+            <>
+              <PaginationItem>
+                <PaginationLink onClick={() => onPageChange(1)} isActive={currentPage === 1}>
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              {startPage > 2 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+            </>
+          )}
+
+          {pageNumbers.map((num) => (
+            <PaginationItem key={num}>
+              <PaginationLink onClick={() => onPageChange(num)} isActive={num === currentPage}>
+                {num}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          {endPage < totalPages && (
+            <>
+              {endPage < totalPages - 1 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationLink onClick={() => onPageChange(totalPages)} isActive={currentPage === totalPages}>
+                  {totalPages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => onPageChange(currentPage + 1)}
+              className={!hasNextPage ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              aria-disabled={!hasNextPage}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </PaginationRoot>
+    </div>
+  )
+}
+
+export default Pagination

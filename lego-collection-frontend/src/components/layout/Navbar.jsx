@@ -1,51 +1,138 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+"use client"
+import { Link, useLocation } from "react-router-dom"
+import { useAuth } from "../auth/AuthContext"
+import { Button } from "../ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
+import { LogOut, Menu, Package2, Search, ShieldCheck, User } from "lucide-react"
 
 const Navbar = () => {
-    const { isAuthenticated, role, logout } = useAuth();
+  const { isAuthenticated, role, logout } = useAuth()
+  const location = useLocation()
 
-    const handleLogout = () => {
-        logout();
-    };
+  const handleLogout = () => {
+    logout()
+  }
 
-    return (
-        <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
-            <Link to="/" className="text-xl font-bold">LEGO Gyűjtemény</Link>
-            <div>
-                {isAuthenticated ? (
-                    <>
-                        <Link to="/collection" className="mr-4 hover:text-gray-300">
-                            Gyűjtemény
-                        </Link>
-                        <Link to="/search" className="mr-4 hover:text-gray-300">
-                            Keresés
-                        </Link>
-                        {role === "ADMIN" && (
-                            <Link to="/admin" className="mr-4 hover:text-gray-300">
-                                Admin Panel
-                            </Link>
-                        )}
-                        <button 
-                            onClick={handleLogout}
-                            className="hover:text-gray-300"
-                        >
-                            Kijelentkezés
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <Link to="/login" className="mr-4 hover:text-gray-300">
-                            Bejelentkezés
-                        </Link>
-                        <Link to="/register" className="hover:text-gray-300">
-                            Regisztráció
-                        </Link>
-                    </>
-                )}
-            </div>
+  const isActive = (path) => {
+    return location.pathname === path
+  }
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          <Package2 className="h-6 w-6" />
+          <span className="text-xl font-bold">LEGO Gyűjtemény</span>
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-6">
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/collection"
+                className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/collection") ? "text-primary" : "text-muted-foreground"}`}
+              >
+                Gyűjtemény
+              </Link>
+              <Link
+                to="/search"
+                className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/search") ? "text-primary" : "text-muted-foreground"}`}
+              >
+                Keresés
+              </Link>
+              {role === "ADMIN" && (
+                <Link
+                  to="/admin"
+                  className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/admin") ? "text-primary" : "text-muted-foreground"}`}
+                >
+                  Admin Panel
+                </Link>
+              )}
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Kijelentkezés
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost" size="sm">
+                  Bejelentkezés
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm">Regisztráció</Button>
+              </Link>
+            </>
+          )}
         </nav>
-    );
-};
 
-export default Navbar;
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="md:hidden">
+            <Button variant="outline" size="icon">
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Menü</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>LEGO Gyűjtemény</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {isAuthenticated ? (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link to="/collection" className="flex items-center">
+                    <Package2 className="mr-2 h-4 w-4" />
+                    <span>Gyűjtemény</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/search" className="flex items-center">
+                    <Search className="mr-2 h-4 w-4" />
+                    <span>Keresés</span>
+                  </Link>
+                </DropdownMenuItem>
+                {role === "ADMIN" && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="flex items-center">
+                      <ShieldCheck className="mr-2 h-4 w-4" />
+                      <span>Admin Panel</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Kijelentkezés</span>
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link to="/login" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Bejelentkezés</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/register" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Regisztráció</span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  )
+}
+
+export default Navbar
