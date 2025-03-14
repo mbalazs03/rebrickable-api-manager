@@ -5,7 +5,6 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/Login';
 import Registration from './components/auth/Registration';
-import Logout from './components/auth/Logout';
 import SearchLegoSets from './components/lego/SearchLegoSets';
 import SetDetails from './components/lego/SetDetails';
 import CollectionList from './components/lego/CollectionList';
