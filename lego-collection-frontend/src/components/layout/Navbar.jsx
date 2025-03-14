@@ -25,14 +25,14 @@ const Navbar = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 w-full bg-primary/10 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-16 items-center bg-primary/10 w-full justify-between">
+        <Link to="/collection" className="flex items-center gap-2 mx-10">
           <Package2 className="h-6 w-6" />
           <span className="text-xl font-bold">LEGO Gyűjtemény</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-6 mx-10">
           {isAuthenticated ? (
             <>
               <Link

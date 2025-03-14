@@ -30,7 +30,7 @@ const SetCard = ({ set, completion, missingParts, onAddToCollection, onRemoveFro
           className="w-full h-48 object-contain bg-muted p-2"
         />
         <div className="absolute top-2 right-2">
-          <Badge variant="secondary" className="font-mono">
+          <Badge variant="secondary" className="font-mono text-xs bg-muted text-muted-foreground text-white border-none bg-primary/90">
             {set.set_num}
           </Badge>
         </div>

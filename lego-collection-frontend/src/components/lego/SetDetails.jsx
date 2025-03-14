@@ -137,7 +137,7 @@ const SetDetails = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="flex items-center">
-              <div className="bg-primary/10 p-3 rounded-full mr-3">
+              <div className="bg-primary/10 p-3 px-4 rounded-full mr-3">
                 <span className="text-primary font-semibold">#</span>
               </div>
               <div>
@@ -147,8 +147,8 @@ const SetDetails = () => {
             </div>
 
             <div className="flex items-center">
-              <div className="bg-primary/10 p-3 rounded-full mr-3">
-                <span className="text-primary font-semibold">Y</span>
+              <div className="bg-primary/10 p-3 px-4 rounded-full mr-3">
+                <span className="text-primary font-semibold">Year</span>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Kiadás éve</p>
@@ -157,7 +157,7 @@ const SetDetails = () => {
             </div>
 
             <div className="flex items-center">
-              <div className="bg-primary/10 p-3 rounded-full mr-3">
+              <div className="bg-primary/10 p-3 px-4 rounded-full mr-3">
                 <span className="text-primary font-semibold">P</span>
               </div>
               <div>

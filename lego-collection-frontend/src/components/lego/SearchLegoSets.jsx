@@ -119,17 +119,6 @@ const SearchLegoSets = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">Készlet neve</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  name="name"
-                  value={searchCriteria.name}
-                  onChange={handleInputChange}
-                  placeholder="pl. Star Wars"
-                />
-              </div>
-              <div className="space-y-2">
                 <Label htmlFor="yearFrom">Év (-tól)</Label>
                 <Input
                   id="yearFrom"
@@ -151,27 +140,29 @@ const SearchLegoSets = () => {
                   placeholder="pl. 2023"
                 />
               </div>
+              <div className="flex items-center space-y-5">
+                <Checkbox
+                  id="buildable"
+                  className="mr-2 size-5 bg-primary/10 border-primary/10 mt-5"
+                  checked={showBuildable}
+                  onCheckedChange={() => setShowBuildable((prev) => !prev)}
+                />
+                <Label htmlFor="buildable">Építhetőség mutatása</Label>
+              </div>
+              <Button type="submit" className="w-full bg-primary text-white mt-auto" size="lg">
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Keresés folyamatban...
+                  </>
+                ) : (
+                  "Keresés"
+                )}
+              </Button>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="buildable"
-                checked={showBuildable}
-                onCheckedChange={() => setShowBuildable((prev) => !prev)}
-              />
-              <Label htmlFor="buildable">Építhetőség mutatása</Label>
-            </div>
 
-            <Button type="submit" className="w-full" size="lg">
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Keresés folyamatban...
-                </>
-              ) : (
-                "Keresés"
-              )}
-            </Button>
+
           </form>
         </CardContent>
       </Card>
