@@ -58,7 +58,8 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of(
             "token", jwt,
-            "role", roleWithoutPrefix
+            "role", roleWithoutPrefix,
+            "username", authenticatedUser.getUsername()
         ));
     }
 }

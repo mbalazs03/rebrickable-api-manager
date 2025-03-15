@@ -82,6 +82,7 @@ public class Set {
         this.numParts = numParts;
     }
 
+    @JsonProperty("set_img_url")
     public String getSetImgUrl() {
         return setImgUrl;
     }

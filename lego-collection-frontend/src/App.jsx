@@ -9,6 +9,7 @@ import SearchLegoSets from './components/lego/SearchLegoSets';
 import SetDetails from './components/lego/SetDetails';
 import CollectionList from './components/lego/CollectionList';
 import AdminPanel from './components/layout/AdminPanel';
+import CreateSetForm from './components/lego/CreateSetForm';
 
 function App() {
     return (
@@ -37,6 +38,11 @@ function App() {
             <Route path="/set/:setNum" element={
               <ProtectedRoute>
                 <SetDetails />
+              </ProtectedRoute>
+            } />
+            <Route path="/create-set" element={
+              <ProtectedRoute>
+                <CreateSetForm />
               </ProtectedRoute>
             } />
           </Routes>

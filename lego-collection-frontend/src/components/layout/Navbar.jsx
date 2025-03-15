@@ -1,6 +1,7 @@
 "use client"
 import { Link, useLocation } from "react-router-dom"
 import { useAuth } from "../auth/AuthContext"
+import { PackagePlus } from "lucide-react"
 import { Button } from "../ui/button"
 import {
   DropdownMenu,
@@ -28,7 +29,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 w-full bg-primary/10 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center bg-primary/10 w-full justify-between">
         <Link to="/collection" className="flex items-center gap-2 mx-10">
-          <Package2 className="h-6 w-6" />
+          <img src="/logo33.png" alt="Lego Collection" className="h-10 w-10 -ml-2" />
           <span className="text-xl font-bold">LEGO Gyűjtemény</span>
         </Link>
 
@@ -46,6 +47,12 @@ const Navbar = () => {
                 className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/search") ? "text-primary" : "text-muted-foreground"}`}
               >
                 Keresés
+              </Link>
+              <Link
+                to="/create-set"
+                className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/create-set") ? "text-primary" : "text-muted-foreground"}`}
+              >
+                Készlet létrehozása
               </Link>
               {role === "ADMIN" && (
                 <Link
@@ -75,13 +82,13 @@ const Navbar = () => {
         </nav>
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild className="md:hidden">
+          <DropdownMenuTrigger asChild className="md:hidden mx-4">
             <Button variant="outline" size="icon">
               <Menu className="h-5 w-5" />
               <span className="sr-only">Menü</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="end" className="w-56 mx-auto">
             <DropdownMenuLabel>LEGO Gyűjtemény</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {isAuthenticated ? (
@@ -96,6 +103,12 @@ const Navbar = () => {
                   <Link to="/search" className="flex items-center">
                     <Search className="mr-2 h-4 w-4" />
                     <span>Keresés</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/create-set" className="flex items-center">
+                    <PackagePlus className="mr-2 h-4 w-4" />
+                    <span>Készlet létrehozása</span>
                   </Link>
                 </DropdownMenuItem>
                 {role === "ADMIN" && (

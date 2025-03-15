@@ -8,6 +8,7 @@ import { Badge } from "../ui/badge"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
+import logo33 from "../../assets/logo33.png"
 
 const SetCard = ({ set, completion, missingParts, onAddToCollection, onRemoveFromCollection }) => {
   const navigate = useNavigate()
@@ -21,11 +22,13 @@ const SetCard = ({ set, completion, missingParts, onAddToCollection, onRemoveFro
     return "bg-red-500"
   }
 
+  const imageUrl = set.set_img_url ? set.set_img_url : logo33;
+
   return (
     <Card className="overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow">
       <div className="relative cursor-pointer" onClick={() => navigate(`/set/${set.set_num}`)}>
         <img
-          src={set.set_img_url || "/placeholder.svg"}
+          src={imageUrl}
           alt={set.name}
           className="w-full h-48 object-contain bg-muted p-2"
         />

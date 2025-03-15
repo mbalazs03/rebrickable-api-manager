@@ -27,7 +27,7 @@ const Login = () => {
     try {
       const response = await axios.post("/api/auth/login", { username, password })
       const { token, role } = response.data
-      login(token, role)
+      login(token, role, username)
       navigate("/collection")
     } catch (error) {
       console.error(error)

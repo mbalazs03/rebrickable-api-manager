@@ -40,3 +40,5 @@ build/
 .env
 
 application.properties
+
+uploads/
