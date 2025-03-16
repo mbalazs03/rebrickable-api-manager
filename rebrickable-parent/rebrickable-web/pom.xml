@@ -28,11 +28,6 @@
         </dependency>
         <dependency>
             <groupId>org.rebrickable</groupId>
-            <artifactId>rebrickable-database</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.rebrickable</groupId>
             <artifactId>rebrickable-api</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -60,6 +55,16 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
