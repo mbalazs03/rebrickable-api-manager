@@ -9,9 +9,13 @@ import org.springframework.http.HttpStatus;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class RebrickableApiClient {
+
+    private static final Logger logger = LoggerFactory.getLogger(RebrickableApiClient.class);
 
     private final RestTemplate restTemplate;
     private final String apiKey;
@@ -23,15 +27,19 @@ public class RebrickableApiClient {
     public RebrickableApiClient(RestTemplate restTemplate, @Value("${rebrickable.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
+        logger.info("RebrickableApiClient initialized with baseUrl: {}", baseUrl);
     }
 
     private void respectRateLimit() {
         Instant now = Instant.now();
         long waitTime = RATE_LIMIT.minus(Duration.between(lastApiCall, now)).toMillis();
         if (waitTime > 0) {
+            logger.debug("Rate limit enforced. Sleeping for {} ms", waitTime);
             try {
                 Thread.sleep(waitTime);
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+                Thread.currentThread().interrupt();
+            }
         }
         lastApiCall = Instant.now();
     }
@@ -42,11 +50,13 @@ public class RebrickableApiClient {
                 respectRateLimit();
                 return request.get();
             } catch (HttpClientErrorException e) {
+                logger.error("HTTP client error: {}", e.getStatusCode());
                 if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
                     String retryAfter = Objects.requireNonNull(e.getResponseHeaders()).getFirst("Retry-After");
                     if (retryAfter != null) {
                         try {
                             int seconds = Integer.parseInt(retryAfter);
+                            logger.warn("Received TOO_MANY_REQUESTS. Retrying after {} seconds", seconds);
                             try {
                                 Thread.sleep(seconds * 1000L);
                             } catch (InterruptedException ie) {
@@ -54,6 +64,7 @@ public class RebrickableApiClient {
                             }
                             continue;
                         } catch (NumberFormatException nfe) {
+                            logger.warn("Invalid Retry-After header value: {}. Sleeping for minimum request interval", retryAfter);
                             try {
                                 Thread.sleep(MIN_REQUEST_INTERVAL.toMillis());
                             } catch (InterruptedException ie) {
@@ -78,8 +89,12 @@ public class RebrickableApiClient {
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
-
-        return executeWithRetry(() -> restTemplate.getForObject(url, Set.class));
+        logger.info("Requesting set details from URL: {}", url);
+        return executeWithRetry(() -> {
+            Set result = restTemplate.getForObject(url, Set.class);
+            logger.debug("Received set details: {}", result);
+            return result;
+        });
     }
 
     public RebrickableResponse searchSets(String query, String setNum, String name, Integer yearFrom, Integer yearTo, int page, int pageSize) {
@@ -105,7 +120,7 @@ public class RebrickableApiClient {
         }
 
         String url = builder.build().toUriString();
-        System.out.println("Requesting URL: " + url);
+        logger.info("Requesting searchSets URL: {}", url);
 
         return executeWithRetry(() -> {
             RebrickableResponse response = restTemplate.getForObject(url, RebrickableResponse.class);
@@ -117,6 +132,7 @@ public class RebrickableApiClient {
                     response.setPrevious(response.getPrevious().replace(baseUrl + "/lego/sets/", "/api/rebrickable/sets/search"));
                 }
             }
+            logger.debug("Received searchSets response: {}", response);
             return response;
         });
     }
@@ -128,7 +144,11 @@ public class RebrickableApiClient {
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
-        System.out.println("Requesting URL: " + url);
-        return executeWithRetry(() -> restTemplate.getForObject(url, RebrickablePartResponse.class));
+        logger.info("Requesting set parts URL: {}", url);
+        return executeWithRetry(() -> {
+            RebrickablePartResponse response = restTemplate.getForObject(url, RebrickablePartResponse.class);
+            logger.debug("Received set parts response: {}", response);
+            return response;
+        });
     }
 }
