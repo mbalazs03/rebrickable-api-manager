@@ -30,7 +30,6 @@ public class UserCollectionControllerTest {
         MockitoAnnotations.openMocks(this);
         controller = new UserCollectionController(setRepository);
 
-        // Set up a dummy authentication with username "testuser"
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("testuser", null));
         SecurityContextHolder.setContext(securityContext);

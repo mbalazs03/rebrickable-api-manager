@@ -34,14 +34,16 @@ public class RebrickableApiClient {
         Instant now = Instant.now();
         long waitTime = RATE_LIMIT.minus(Duration.between(lastApiCall, now)).toMillis();
         if (waitTime > 0) {
-            logger.debug("Rate limit enforced. Sleeping for {} ms", waitTime);
+            logger.debug("Rate limit enforced. Waiting for {} ms before next API call", waitTime);
             try {
                 Thread.sleep(waitTime);
-            } catch (InterruptedException ignored) {
+            } catch (InterruptedException e) {
+                logger.warn("Rate limit sleep interrupted", e);
                 Thread.currentThread().interrupt();
             }
         }
         lastApiCall = Instant.now();
+        logger.trace("Rate limit check completed");
     }
 
     private <T> T executeWithRetry(ThrowingSupplier<T> request) {
@@ -85,16 +87,21 @@ public class RebrickableApiClient {
     }
 
     public Set getSetDetails(String setNum) {
-        String url = UriComponentsBuilder.fromHttpUrl(baseUrl + "/lego/sets/" + setNum + "/")
-                .queryParam("key", apiKey)
-                .build()
-                .toUriString();
-        logger.info("Requesting set details from URL: {}", url);
-        return executeWithRetry(() -> {
+        logger.info("Fetching set details for set number: {}", setNum);
+        try {
+            respectRateLimit();
+            String url = UriComponentsBuilder.fromHttpUrl(baseUrl + "/lego/sets/" + setNum + "/")
+                    .queryParam("key", apiKey)
+                    .build()
+                    .toUriString();
+            logger.info("Requesting set details from URL: {}", url);
             Set result = restTemplate.getForObject(url, Set.class);
-            logger.debug("Received set details: {}", result);
+            logger.debug("Successfully retrieved set details for set number: {}", setNum);
             return result;
-        });
+        } catch (Exception e) {
+            logger.error("Error fetching set details for set number: {}", setNum, e);
+            throw e;
+        }
     }
 
     public RebrickableResponse searchSets(String query, String setNum, String name, Integer yearFrom, Integer yearTo, int page, int pageSize) {

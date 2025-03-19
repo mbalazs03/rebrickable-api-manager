@@ -25,18 +25,31 @@ public class RebrickableService {
     }
 
     public Set getSetDetails(String setNum) {
-        logger.info("Fetching details for set: {}", setNum);
-        Set set = apiClient.getSetDetails(setNum);
-        logger.debug("Fetched set details: {}", set);
-        return set;
+        logger.info("Processing request for set details: {}", setNum);
+        try {
+            Set set = apiClient.getSetDetails(setNum);
+            logger.debug("Successfully retrieved set details: {}", set);
+            return set;
+        } catch (Exception e) {
+            logger.error("Failed to retrieve set details for set number: {}", setNum, e);
+            throw e;
+        }
     }
 
     public RebrickableResponse searchSets(String query, String setNum, String name, Integer yearFrom, Integer yearTo, int page, int pageSize) {
-        logger.info("Searching sets with parameters: query={}, setNum={}, name={}, yearFrom={}, yearTo={}, page={}, pageSize={}",
+        logger.info("Searching sets with criteria - query: {}, setNum: {}, name: {}, " +
+                "yearFrom: {}, yearTo: {}, page: {}, pageSize: {}", 
                 query, setNum, name, yearFrom, yearTo, page, pageSize);
-        RebrickableResponse response = apiClient.searchSets(query, setNum, name, yearFrom, yearTo, page, pageSize);
-        logger.debug("Number of sets found: {}", response != null ? response.getCount() : "null");
-        return response;
+        try {
+            RebrickableResponse response = apiClient.searchSets(query, setNum, name, 
+                    yearFrom, yearTo, page, pageSize);
+            logger.debug("Search completed. Found {} results", 
+                    response != null ? response.getCount() : 0);
+            return response;
+        } catch (Exception e) {
+            logger.error("Search operation failed", e);
+            throw e;
+        }
     }
 
     public RebrickablePartResponse getSetParts(String setNum, int page, int pageSize) {

@@ -14,10 +14,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.rebrickable.security.JwtUtil;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,6 +46,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        logger.info("Login attempt for user: {}", user.getUsername());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
@@ -55,6 +60,8 @@ public class AuthController {
         String roleWithoutPrefix = authenticatedUser.getRole().startsWith("ROLE_") 
             ? authenticatedUser.getRole().substring(5) 
             : authenticatedUser.getRole();
+
+        logger.info("User successfully authenticated: {}", authenticatedUser.getUsername());
 
         return ResponseEntity.ok(Map.of(
             "token", jwt,

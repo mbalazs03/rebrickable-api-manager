@@ -5,6 +5,8 @@ import org.rebrickable.RebrickablePartResponse;
 import org.rebrickable.RebrickableResponse;
 import org.rebrickable.service.RebrickableService;
 import org.rebrickable.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import java.util.List;
 @RequestMapping("/api/rebrickable")
 public class RebrickableController {
 
+    private static final Logger logger = LoggerFactory.getLogger(RebrickableController.class);
+
     private final RebrickableService rebrickableService;
 
     public RebrickableController(RebrickableService rebrickableService) {
@@ -24,7 +28,10 @@ public class RebrickableController {
 
     @GetMapping("/sets/{setNum}")
     public Set getSetDetails(@PathVariable String setNum) {
-        return rebrickableService.getSetDetails(setNum);
+        logger.info("Fetching details for set: {}", setNum);
+        Set set = rebrickableService.getSetDetails(setNum);
+        logger.debug("Retrieved set details for {}: {}", setNum, set);
+        return set;
     }
 
     @GetMapping("/sets/search")
@@ -36,7 +43,11 @@ public class RebrickableController {
             @RequestParam(required = false) Integer yearTo,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int pageSize) {
-        return rebrickableService.searchSets(query, setNum, name, yearFrom, yearTo, page, pageSize);
+        logger.info("Searching sets with params - query: {}, setNum: {}, name: {}, yearFrom: {}, yearTo: {}, page: {}, pageSize: {}",
+                query, setNum, name, yearFrom, yearTo, page, pageSize);
+        RebrickableResponse response = rebrickableService.searchSets(query, setNum, name, yearFrom, yearTo, page, pageSize);
+        logger.debug("Search returned {} results", response.getCount());
+        return response;
     }
 
     @GetMapping("/sets/{setNum}/parts")
@@ -59,10 +70,12 @@ public class RebrickableController {
             @RequestParam(defaultValue = "10") int pageSize) {
     
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        logger.info("User {} requesting buildable sets", username);
     
         List<BuildableSetResponse> buildableSets = rebrickableService.getBuildableSets(
             username, query, setNum, name, yearFrom, yearTo, page, pageSize);
     
+        logger.debug("Found {} buildable sets for user {}", buildableSets.size(), username);
         return ResponseEntity.ok(buildableSets);
     }
 
