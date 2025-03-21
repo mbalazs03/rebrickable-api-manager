@@ -35,6 +35,17 @@ const SetDetails = () => {
       }
 
       try {
+        if (isBuildableView && !location.state?.missingParts) {
+          const savedMissingParts = sessionStorage.getItem('missingParts')
+          if (savedMissingParts) {
+            const parsedMissingParts = JSON.parse(savedMissingParts)
+            location.state = {
+              ...location.state,
+              missingParts: parsedMissingParts
+            }
+          }
+        }
+
         const response = await axios.get(`/api/rebrickable/sets/${setNum}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -50,6 +61,15 @@ const SetDetails = () => {
 
     fetchSetDetails()
   }, [setNum, navigate])
+
+  useEffect(() => {
+    return () => {
+      const currentPath = window.location.pathname
+      if (!currentPath.includes('/search')) {
+        sessionStorage.removeItem('missingParts')
+      }
+    }
+  }, [])
 
   const fetchParts = async (page) => {
     const token = localStorage.getItem("token")
@@ -81,7 +101,11 @@ const SetDetails = () => {
   }, [partsPage, setNum])
 
   const handleBack = () => {
-    navigate(-1)
+    if (location.state?.searchState) {
+      navigate(-1)
+    } else {
+      navigate('/search')
+    }
   }
 
   const handlePageChange = (newPage) => {

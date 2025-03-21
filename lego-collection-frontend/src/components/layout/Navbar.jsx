@@ -17,6 +17,10 @@ const Navbar = () => {
   const { isAuthenticated, role, logout } = useAuth()
   const location = useLocation()
 
+  if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/') {
+    return null;
+  }
+
   const handleLogout = () => {
     logout()
   }
@@ -47,12 +51,6 @@ const Navbar = () => {
                 className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/search") ? "text-primary" : "text-muted-foreground"}`}
               >
                 Keresés
-              </Link>
-              <Link
-                to="/create-set"
-                className={`text-sm font-medium transition-colors hover:text-primary ${isActive("/create-set") ? "text-primary" : "text-muted-foreground"}`}
-              >
-                Készlet létrehozása
               </Link>
               {role === "ADMIN" && (
                 <Link
@@ -103,12 +101,6 @@ const Navbar = () => {
                   <Link to="/search" className="flex items-center">
                     <Search className="mr-2 h-4 w-4" />
                     <span>Keresés</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/create-set" className="flex items-center">
-                    <PackagePlus className="mr-2 h-4 w-4" />
-                    <span>Készlet létrehozása</span>
                   </Link>
                 </DropdownMenuItem>
                 {role === "ADMIN" && (

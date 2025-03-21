@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
 import { Card, CardContent } from "../ui/card"
 import { Input } from "../ui/input"
@@ -28,18 +28,48 @@ const SearchLegoSets = () => {
   const [hasNextPage, setHasNextPage] = useState(false)
   const [hasPrevPage, setHasPrevPage] = useState(false)
   const [showBuildable, setShowBuildable] = useState(false)
+  const [buildableResults, setBuildableResults] = useState([])
 
   const pageSize = 12
 
   const navigate = useNavigate()
+
+  const saveSearchState = () => {
+    const searchState = {
+      criteria: searchCriteria,
+      results: results,
+      totalResults: totalResults,
+      currentPage: page,
+      hasNext: hasNextPage,
+      hasPrev: hasPrevPage,
+      showBuildable: showBuildable,
+      buildableResults: buildableResults
+    }
+    sessionStorage.setItem('searchState', JSON.stringify(searchState))
+  }
+
+  useEffect(() => {
+    const savedState = sessionStorage.getItem('searchState')
+    if (savedState) {
+      const state = JSON.parse(savedState)
+      setSearchCriteria(state.criteria)
+      setResults(state.results)
+      setTotalResults(state.totalResults)
+      setPage(state.currentPage)
+      setHasNextPage(state.hasNext)
+      setHasPrevPage(state.hasPrev)
+      setShowBuildable(state.showBuildable)
+      setBuildableResults(state.buildableResults)
+    }
+  }, [])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setSearchCriteria((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSearch = async (e, newPage = 1) => {
-    e?.preventDefault()
+  const handleSearch = async (event, newPage = 1) => {
+    if (event) event.preventDefault()
     setLoading(true)
     setError(null)
     setPage(newPage)
@@ -65,6 +95,8 @@ const SearchLegoSets = () => {
       setTotalResults(response.data.count || response.data.length)
       setHasNextPage(response.data.next !== null)
       setHasPrevPage(response.data.previous !== null)
+      
+      saveSearchState()
     } catch (error) {
       setError("Hiba történt a LEGO készletek keresésekor")
     } finally {
@@ -92,7 +124,10 @@ const SearchLegoSets = () => {
   }
 
   const handleSetClick = (set) => {
+    saveSearchState()
+    
     if (showBuildable) {
+      sessionStorage.setItem('missingParts', JSON.stringify(set.missingParts))
       navigate(`/set/${set.set.set_num}`, {
         state: {
           buildable: true,
@@ -103,6 +138,15 @@ const SearchLegoSets = () => {
       navigate(`/set/${set.set_num}`)
     }
   }
+
+  useEffect(() => {
+    return () => {
+      const currentPath = window.location.pathname
+      if (!currentPath.includes('/set/')) {
+        sessionStorage.removeItem('searchState')
+      }
+    }
+  }, [])
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
