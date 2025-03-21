@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, useLocation } from "react-router-dom"
 import axios from "axios"
 import { Card, CardContent } from "../ui/card"
 import { Button } from "../ui/button"
@@ -12,6 +12,8 @@ import Pagination from "../common/Pagination"
 
 const SetDetails = () => {
   const { setNum } = useParams()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [setDetails, setSetDetails] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -20,8 +22,9 @@ const SetDetails = () => {
   const [totalParts, setTotalParts] = useState(0)
   const [hasNextPage, setHasNextPage] = useState(false)
   const [hasPrevPage, setHasPrevPage] = useState(false)
+  const [isBuildableView] = useState(location.state?.buildable || false)
+  const [missingPartsList] = useState(location.state?.missingParts || [])
   const pageSize = 20
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchSetDetails = async () => {
@@ -83,6 +86,75 @@ const SetDetails = () => {
 
   const handlePageChange = (newPage) => {
     setPartsPage(newPage)
+  }
+
+  const renderParts = () => {
+    if (!Array.isArray(parts) || parts.length === 0) {
+      return <div>Nincsenek elérhető alkatrészek</div>
+    }
+
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {parts.map((part) => {
+          const isMissing = isBuildableView && missingPartsList.some(
+            missingPart => missingPart.includes(part.part.name)
+          )
+          
+          return (
+            <TooltipProvider key={part.id}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Card 
+                    className={`overflow-hidden hover:shadow-md transition-shadow ${
+                      isBuildableView 
+                        ? isMissing
+                          ? "bg-red-50 dark:bg-red-950/30"
+                          : "bg-green-50 dark:bg-green-950/30"
+                        : ""
+                    }`}
+                  >
+                    <div className="bg-muted p-3 flex justify-center">
+                      <img
+                        src={part.part.part_img_url || "/placeholder.svg"}
+                        alt={part.part.name}
+                        className="h-24 object-contain"
+                      />
+                    </div>
+                    <CardContent className="p-3">
+                      <p className="text-xs font-medium truncate">{part.part.name}</p>
+                      <div className="flex justify-between mt-1">
+                        <span className="text-xs text-muted-foreground">{part.color.name}</span>
+                        <div className="flex items-center gap-2">
+                          {isBuildableView && (
+                            <Badge 
+                              variant={isMissing ? "destructive" : "success"} 
+                              className="text-xs"
+                            >
+                              {isMissing ? "Hiányzik" : "Elérhető"}
+                            </Badge>
+                          )}
+                          <Badge variant="secondary" className="text-xs">
+                            {part.quantity}x
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{part.part.name}</p>
+                  <p>Szín: {part.color.name}</p>
+                  <p>Mennyiség: {part.quantity}</p>
+                  {isBuildableView && (
+                    <p>Státusz: {isMissing ? "Hiányzik" : "Elérhető"}</p>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )
+        })}
+      </div>
+    )
   }
 
   if (loading)
@@ -175,56 +247,18 @@ const SetDetails = () => {
               </Badge>
             </h2>
 
-            {parts.length === 0 ? (
-              <p className="text-muted-foreground">Nincs elérhető alkatrész</p>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {parts.map((part) => (
-                    <TooltipProvider key={part.id}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Card className="overflow-hidden hover:shadow-md transition-shadow">
-                            <div className="bg-muted p-3 flex justify-center">
-                              <img
-                                src={part.part.part_img_url || "/placeholder.svg"}
-                                alt={part.part.name}
-                                className="h-24 object-contain"
-                              />
-                            </div>
-                            <CardContent className="p-3">
-                              <p className="text-xs font-medium truncate">{part.part.name}</p>
-                              <div className="flex justify-between mt-1">
-                                <span className="text-xs text-muted-foreground">{part.color.name}</span>
-                                <Badge variant="secondary" className="text-xs">
-                                  {part.quantity}x
-                                </Badge>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>{part.part.name}</p>
-                          <p>Szín: {part.color.name}</p>
-                          <p>Mennyiség: {part.quantity}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
+            {renderParts()}
 
-                <div className="mt-8">
-                  <Pagination
-                    currentPage={partsPage}
-                    totalResults={totalParts}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
-                    hasNextPage={hasNextPage}
-                    hasPrevPage={hasPrevPage}
-                  />
-                </div>
-              </>
-            )}
+            <div className="mt-8">
+              <Pagination
+                currentPage={partsPage}
+                totalResults={totalParts}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                hasNextPage={hasNextPage}
+                hasPrevPage={hasPrevPage}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>

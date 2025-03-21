@@ -10,6 +10,7 @@ import { Label } from "../ui/label"
 import { Loader2 } from "lucide-react"
 import SetCard from "../common/SetCard"
 import Pagination from "../common/Pagination"
+import { useNavigate } from "react-router-dom"
 
 const SearchLegoSets = () => {
   const [searchCriteria, setSearchCriteria] = useState({
@@ -29,6 +30,8 @@ const SearchLegoSets = () => {
   const [showBuildable, setShowBuildable] = useState(false)
 
   const pageSize = 12
+
+  const navigate = useNavigate()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -86,6 +89,19 @@ const SearchLegoSets = () => {
 
   const handlePageChange = (newPage) => {
     handleSearch(null, newPage)
+  }
+
+  const handleSetClick = (set) => {
+    if (showBuildable) {
+      navigate(`/set/${set.set.set_num}`, {
+        state: {
+          buildable: true,
+          missingParts: set.missingParts
+        }
+      })
+    } else {
+      navigate(`/set/${set.set_num}`)
+    }
   }
 
   return (
@@ -160,9 +176,6 @@ const SearchLegoSets = () => {
                 )}
               </Button>
             </div>
-
-
-
           </form>
         </CardContent>
       </Card>
@@ -180,13 +193,14 @@ const SearchLegoSets = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {results.map((set) => (
-              <SetCard
-                key={set.set_num || set.set.set_num}
-                set={set.set || set}
-                completion={set.completionPercentage}
-                missingParts={set.missingParts}
-                onAddToCollection={addToCollection}
-              />
+              <div key={set.set_num || set.set.set_num} onClick={() => handleSetClick(set)}>
+                <SetCard
+                  set={set.set || set}
+                  completion={set.completionPercentage}
+                  missingParts={set.missingParts}
+                  onAddToCollection={addToCollection}
+                />
+              </div>
             ))}
           </div>
 
