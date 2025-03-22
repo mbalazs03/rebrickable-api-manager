@@ -7,6 +7,7 @@ import { Loader2, Package2 } from "lucide-react"
 import SetCard from "../common/SetCard"
 import { Button } from "../ui/button"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import LoadingSpinner from "../common/LoadingSpinner"
 
 const CollectionList = () => {
   const [sets, setSets] = useState([])
@@ -21,20 +22,25 @@ const CollectionList = () => {
       return
     }
 
-    axios
-      .get("/api/user/collection", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/user/collection", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
         setSets(response.data)
-        setLoading(false)
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error)
+      } finally {
         setLoading(false)
-      })
+      }
+    }
+
+    fetchData()
   }, [navigate])
 
   const token = localStorage.getItem("token")
@@ -57,12 +63,7 @@ const CollectionList = () => {
   }
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2 text-lg">Betöltés...</span>
-      </div>
-    )
+    return <LoadingSpinner text="Készlet betöltése..." />
   }
 
   if (error) {

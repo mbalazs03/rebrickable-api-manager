@@ -13,6 +13,7 @@ import logo33 from "../../assets/logo33.png"
 const SetCard = ({ set, completion, missingParts, onAddToCollection, onRemoveFromCollection }) => {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = React.useState(false)
+  const [showCopyToast, setShowCopyToast] = React.useState(false)
 
   const getCompletionColor = (percentage) => {
     if (percentage === 100) return "bg-green-500"
@@ -32,20 +33,43 @@ const SetCard = ({ set, completion, missingParts, onAddToCollection, onRemoveFro
           alt={set.name}
           className="w-full h-48 object-contain bg-muted p-2"
         />
-        <div className="absolute top-2 right-2">
-          <Badge variant="secondary" className="font-mono text-xs bg-muted text-muted-foreground text-white border-none bg-primary/90">
-            {set.set_num}
-          </Badge>
-        </div>
       </div>
 
       <CardContent className="p-4 flex-grow">
-        <h2
-          className="text-lg font-semibold mb-1 line-clamp-2 cursor-pointer hover:text-primary"
-          onClick={() => navigate(`/set/${set.set_num}`)}
-        >
-          {set.name}
-        </h2>
+        <div className="flex items-center gap-2 mb-1">
+          <h2
+            className="text-lg font-semibold line-clamp-2 cursor-pointer hover:text-primary flex-grow"
+            onClick={() => navigate(`/set/${set.set_num}`)}
+          >
+            {set.name}
+          </h2>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge 
+                  variant="secondary" 
+                  className="font-mono text-xs bg-muted text-muted-foreground text-white border-none bg-primary/90 cursor-pointer hover:bg-primary/70 whitespace-nowrap"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(set.set_num);
+                    setShowCopyToast(true);
+                    setTimeout(() => setShowCopyToast(false), 2000);
+                  }}
+                >
+                  {set.set_num}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Kattints a másoláshoz</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        {showCopyToast && (
+          <div className="fixed bottom-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+            Készlet száma másolva!
+          </div>
+        )}
         <div className="flex justify-between items-center text-sm text-muted-foreground mb-2">
           <span>Év: {set.year}</span>
           <span>{set.num_parts} db</span>
@@ -65,23 +89,27 @@ const SetCard = ({ set, completion, missingParts, onAddToCollection, onRemoveFro
             </div>
 
             {missingParts && missingParts.length > 0 && (
-              <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mt-2">
-                <CollapsibleTrigger asChild>
-                  <Button variant="outline" size="sm" className="w-full text-xs">
-                    Hiányzó alkatrészek{" "}
-                    {isOpen ? <ChevronUp className="h-3 w-3 ml-1" /> : <ChevronDown className="h-3 w-3 ml-1" />}
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <ul className="pl-4 mt-2 text-xs text-muted-foreground space-y-1">
-                    {missingParts.map((part, index) => (
-                      <li key={index} className="list-disc">
-                        {part}
-                      </li>
-                    ))}
-                  </ul>
-                </CollapsibleContent>
-              </Collapsible>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full text-xs mt-2"
+                onClick={() => {
+                  const csvContent = "Hiányzó alkatrészek\n" + missingParts.join("\n");
+                  
+                  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                  const link = document.createElement("a");
+                  const url = URL.createObjectURL(blob);
+                  
+                  link.setAttribute("href", url);
+                  link.setAttribute("download", `hianyzo_alkatreszek_${set.set_num}.csv`);
+                  document.body.appendChild(link);
+                  
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
+                Hiányzó alkatrészek exportálása
+              </Button>
             )}
           </div>
         )}

@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react"
 import SetCard from "../common/SetCard"
 import Pagination from "../common/Pagination"
 import { useNavigate } from "react-router-dom"
+import LoadingSpinner from "../common/LoadingSpinner"
 
 const SearchLegoSets = () => {
   const [searchCriteria, setSearchCriteria] = useState({
@@ -29,10 +30,19 @@ const SearchLegoSets = () => {
   const [hasPrevPage, setHasPrevPage] = useState(false)
   const [showBuildable, setShowBuildable] = useState(false)
   const [buildableResults, setBuildableResults] = useState([])
+  const [initialLoading, setInitialLoading] = useState(true)
 
   const pageSize = 12
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialLoading(false)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const saveSearchState = () => {
     const searchState = {
@@ -81,6 +91,7 @@ const SearchLegoSets = () => {
       const response = await axios.get(endpoint, {
         params: {
           ...searchCriteria,
+          setNum: searchCriteria.setNum.trim() || null,
           yearFrom: searchCriteria.yearFrom || null,
           yearTo: searchCriteria.yearTo || null,
           page: newPage,
@@ -147,6 +158,10 @@ const SearchLegoSets = () => {
       }
     }
   }, [])
+
+  if (initialLoading) {
+    return <LoadingSpinner text="Oldal betöltése..." />
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -225,10 +240,7 @@ const SearchLegoSets = () => {
       </Card>
 
       {loading && !results.length && (
-        <div className="flex justify-center items-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="ml-2 text-lg">Betöltés...</span>
-        </div>
+        <LoadingSpinner text="Betöltés..." />
       )}
 
       {error && <div className="bg-destructive/10 text-destructive p-4 rounded-md mb-6">{error}</div>}

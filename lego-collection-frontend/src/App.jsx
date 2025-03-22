@@ -10,44 +10,47 @@ import SetDetails from './components/lego/SetDetails';
 import CollectionList from './components/lego/CollectionList';
 import AdminPanel from './components/layout/AdminPanel';
 import CreateSetForm from './components/lego/CreateSetForm';
+import { ThemeProvider } from "./components/theme/ThemeContext"
 
 function App() {
     return (
-      <AuthProvider>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Registration />} />
-            <Route path="/collection" element={
-              <ProtectedRoute>
-                <CollectionList />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <AdminPanel />
-              </ProtectedRoute>
-            } />
-            <Route path="/search" element={
-              <ProtectedRoute>
-                <SearchLegoSets />
-              </ProtectedRoute>
-            } />
-            <Route path="/set/:setNum" element={
-              <ProtectedRoute>
-                <SetDetails />
-              </ProtectedRoute>
-            } />
-            <Route path="/create-set" element={
-              <ProtectedRoute>
-                <CreateSetForm />
-              </ProtectedRoute>
-            } />
-          </Routes>
-        </Router>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Registration />} />
+              <Route path="/collection" element={
+                <ProtectedRoute>
+                  <CollectionList />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <AdminPanel />
+                </ProtectedRoute>
+              } />
+              <Route path="/search" element={
+                <ProtectedRoute>
+                  <SearchLegoSets />
+                </ProtectedRoute>
+              } />
+              <Route path="/set/:setNum" element={
+                <ProtectedRoute>
+                  <SetDetails />
+                </ProtectedRoute>
+              } />
+              <Route path="/create-set" element={
+                <ProtectedRoute>
+                  <CreateSetForm />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
     );
   }
   

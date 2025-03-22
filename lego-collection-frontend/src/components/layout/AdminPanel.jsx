@@ -14,6 +14,7 @@ import { Label } from "../../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
 import { Loader2, ShieldAlert, ShieldCheck, UserCog, Trash2, User, UserPlus } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
+import LoadingSpinner from "../common/LoadingSpinner"
 
 const AdminPanel = () => {
   const { isAuthenticated, role } = useAuth()
@@ -149,15 +150,12 @@ const AdminPanel = () => {
   }
 
   if (loading) {
+    setTimeout(() => {}, 2000)
     return (
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto py-8">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Admin Panel - Felhasználók kezelése</CardTitle>
-            <CardDescription>Felhasználók betöltése...</CardDescription>
-          </CardHeader>
           <CardContent className="flex justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <LoadingSpinner text="Betöltés..." />
           </CardContent>
         </Card>
       </div>

@@ -9,6 +9,7 @@ import { ArrowLeft, ExternalLink, Loader2 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { Badge } from "../ui/badge"
 import Pagination from "../common/Pagination"
+import LoadingSpinner from "../common/LoadingSpinner"
 
 const SetDetails = () => {
   const { setNum } = useParams()
@@ -184,8 +185,7 @@ const SetDetails = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-[50vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2 text-lg">Betöltés...</span>
+        <LoadingSpinner>Betöltés...</LoadingSpinner>
       </div>
     )
 

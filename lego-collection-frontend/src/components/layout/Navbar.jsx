@@ -11,11 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import { LogOut, Menu, Package2, Search, ShieldCheck, User } from "lucide-react"
+import { LogOut, Menu, Package2, Search, ShieldCheck, User, Moon, Sun } from "lucide-react"
+import { useTheme } from "../theme/ThemeContext"
 
 const Navbar = () => {
   const { isAuthenticated, role, logout } = useAuth()
   const location = useLocation()
+  const { theme, toggleTheme } = useTheme()
 
   if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/') {
     return null;
@@ -30,8 +32,8 @@ const Navbar = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-primary/10 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 items-center bg-primary/10 w-full justify-between">
+    <header className="sticky top-0 z-50 w-full bg-primary/10 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:bg-gray-900/60 dark:border-gray-800">
+      <div className="flex h-16 items-center bg-primary/10 dark:bg-gray-900/60 w-full justify-between">
         <Link to="/collection" className="flex items-center gap-2 mx-10">
           <img src="/logo33.png" alt="Lego Collection" className="h-10 w-10 -ml-2" />
           <span className="text-xl font-bold">LEGO Gyűjtemény</span>
@@ -60,6 +62,13 @@ const Navbar = () => {
                   Admin Panel
                 </Link>
               )}
+              <Button variant="solid" size="icon" onClick={toggleTheme}>
+                {theme === "light" ? (
+                  <Moon className="h-4 w-4" />
+                ) : (
+                  <Sun className="h-4 w-4" />
+                )}
+              </Button>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Kijelentkezés
@@ -102,6 +111,21 @@ const Navbar = () => {
                     <Search className="mr-2 h-4 w-4" />
                     <span>Keresés</span>
                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center">
+                  <Button variant="ghost" size="button" onClick={toggleTheme}>
+                    {theme === "light" ? (
+                      <>
+                        <Moon className="mr-2 h-4 w-4" />
+                        <span>Sötét mód</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sun className="mr-2 h-4 w-4" />
+                        <span>Világos mód</span>
+                      </>
+                    )}
+                  </Button>
                 </DropdownMenuItem>
                 {role === "ADMIN" && (
                   <DropdownMenuItem asChild>

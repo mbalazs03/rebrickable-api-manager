@@ -9,6 +9,7 @@ import { Button } from "../../components/ui/button"
 import { Label } from "../../components/ui/label"
 import { Alert, AlertDescription } from "../../components/ui/alert"
 import { Loader2, UserPlus, CheckCircle2, AlertCircle } from "lucide-react"
+import LoadingSpinner from "../../components/common/LoadingSpinner"
 
 const Registration = () => {
   const [username, setUsername] = useState("")
@@ -111,8 +112,7 @@ const Registration = () => {
             <Button type="submit" className="w-full" disabled={isLoading || isSuccess}>
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Regisztráció...
+                  <LoadingSpinner text="Regisztráció..." />
                 </>
               ) : isSuccess ? (
                 <>

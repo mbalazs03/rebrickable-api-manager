@@ -62,10 +62,22 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "spinner-3d": {
+          '0%': {
+            transform: 'rotate(45deg) rotateX(-25deg) rotateY(25deg)',
+          },
+          '50%': {
+            transform: 'rotate(45deg) rotateX(-385deg) rotateY(25deg)',
+          },
+          '100%': {
+            transform: 'rotate(45deg) rotateX(-385deg) rotateY(385deg)',
+          },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "spinner": "spinner-3d 2s infinite ease",
       },
     },
   },
