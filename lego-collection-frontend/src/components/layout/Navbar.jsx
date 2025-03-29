@@ -34,7 +34,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full bg-primary/10 border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:bg-gray-900/60 dark:border-gray-800">
       <div className="flex h-16 items-center bg-primary/10 dark:bg-gray-900/60 w-full justify-between">
-        <Link to="/collection" className="flex items-center gap-2 mx-10">
+        <Link to="/home" className="flex items-center gap-2 mx-10">
           <img src="/logo33.png" alt="Lego Collection" className="h-10 w-10 -ml-2" />
           <span className="text-xl font-bold">LEGO Gyűjtemény</span>
         </Link>

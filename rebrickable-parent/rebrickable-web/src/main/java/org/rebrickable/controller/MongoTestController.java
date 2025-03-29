@@ -1,7 +1,7 @@
 package org.rebrickable.controller;
 
 import org.rebrickable.Set;
-import org.rebrickable.SetRepository;
+import org.rebrickable.repository.SetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,5 +1,6 @@
-package org.rebrickable;
+package org.rebrickable.repository;
 
+import org.rebrickable.Part;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

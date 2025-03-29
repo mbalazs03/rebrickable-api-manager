@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.rebrickable.User;
-import org.rebrickable.UserRepository;
+import org.rebrickable.repository.UserRepository;
 import org.rebrickable.config.GlobalExceptionHandler;
 import org.rebrickable.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;

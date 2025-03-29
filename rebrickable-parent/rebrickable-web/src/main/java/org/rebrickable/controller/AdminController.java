@@ -1,7 +1,7 @@
 package org.rebrickable.controller;
 
 import org.rebrickable.User;
-import org.rebrickable.UserRepository;
+import org.rebrickable.repository.UserRepository;
 import org.rebrickable.security.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

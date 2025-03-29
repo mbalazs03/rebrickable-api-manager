@@ -3,6 +3,7 @@ package org.rebrickable.service;
 import org.rebrickable.*;
 import org.rebrickable.Set;
 import org.rebrickable.dto.SetPart;
+import org.rebrickable.repository.SetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

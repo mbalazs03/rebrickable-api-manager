@@ -102,10 +102,12 @@ const SetDetails = () => {
   }, [partsPage, setNum])
 
   const handleBack = () => {
-    if (location.state?.searchState) {
-      navigate(-1)
-    } else {
+    if (location.state?.fromCollectionList) {
+      navigate('/collectionlist')
+    } else if (location.state?.searchState) {
       navigate('/search')
+    } else {
+      navigate(-1)
     }
   }
 

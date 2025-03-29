@@ -6,7 +6,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.rebrickable.RebrickableApiClient;
 import org.rebrickable.RebrickableResponse;
 import org.rebrickable.Set;
-import org.rebrickable.SetRepository;
+import org.rebrickable.repository.SetRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

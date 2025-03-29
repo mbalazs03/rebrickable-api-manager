@@ -1,7 +1,7 @@
 package org.rebrickable.controller;
 
 import org.rebrickable.Set;
-import org.rebrickable.SetRepository;
+import org.rebrickable.repository.SetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

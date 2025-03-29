@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.rebrickable.Set;
-import org.rebrickable.SetRepository;
+import org.rebrickable.repository.SetRepository;
 import org.rebrickable.config.GlobalExceptionHandler;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;

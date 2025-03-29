@@ -1,7 +1,7 @@
 package org.rebrickable.controller;
 
 import org.rebrickable.User;
-import org.rebrickable.UserRepository;
+import org.rebrickable.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,6 +1,7 @@
-package org.rebrickable;
+package org.rebrickable.repository;
 
 import org.junit.jupiter.api.Test;
+import org.rebrickable.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
