@@ -39,4 +39,36 @@ class RebrickableApiClientTest {
         assertEquals("1234-1", actualSet.getSetNum());
         assertEquals("Test Set", actualSet.getName());
     }
+
+    @Test
+    void searchSetsShouldStripApiKeyFromPaginationLinks() {
+        RebrickableApiClient client = new RebrickableApiClient(restTemplate, "secret-key");
+
+        RebrickableResponse upstream = new RebrickableResponse();
+        upstream.setNext("https://rebrickable.com/api/v3/lego/sets/?key=secret-key&page=2");
+        upstream.setPrevious("https://rebrickable.com/api/v3/lego/sets/?key=secret-key&page=1");
+        when(restTemplate.getForObject(anyString(), eq(RebrickableResponse.class))).thenReturn(upstream);
+
+        RebrickableResponse response = client.searchSets(null, null, null, null, null, 2, 10);
+
+        assertFalse(response.getNext().contains("secret-key"));
+        assertFalse(response.getPrevious().contains("secret-key"));
+        assertTrue(response.getNext().startsWith("/api/rebrickable/sets/search"));
+    }
+
+    @Test
+    void getSetPartsShouldStripApiKeyFromPaginationLinks() {
+        RebrickableApiClient client = new RebrickableApiClient(restTemplate, "secret-key");
+
+        RebrickablePartResponse upstream = new RebrickablePartResponse();
+        upstream.setNext("https://rebrickable.com/api/v3/lego/sets/1234-1/parts/?key=secret-key&page=2");
+        upstream.setPrevious(null);
+        when(restTemplate.getForObject(anyString(), eq(RebrickablePartResponse.class))).thenReturn(upstream);
+
+        RebrickablePartResponse response = client.getSetParts("1234-1", 2, 10);
+
+        assertFalse(response.getNext().contains("secret-key"));
+        assertNotNull(response.getNext());
+        assertNull(response.getPrevious());
+    }
 }

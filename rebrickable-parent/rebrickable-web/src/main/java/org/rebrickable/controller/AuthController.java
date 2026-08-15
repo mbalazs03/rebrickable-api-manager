@@ -1,6 +1,7 @@
 package org.rebrickable.controller;
 
 import org.rebrickable.User;
+import org.rebrickable.dto.UserResponse;
 import org.rebrickable.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,10 +39,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
+    public UserResponse register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
-        return userRepository.save(user);
+        return UserResponse.from(userRepository.save(user));
     }
 
     @PostMapping("/login")

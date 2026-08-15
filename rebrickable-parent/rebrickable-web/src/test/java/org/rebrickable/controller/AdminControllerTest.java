@@ -82,7 +82,8 @@ public class AdminControllerTest {
                 .andExpect(jsonPath("$[1].id", is("2")))
                 .andExpect(jsonPath("$[1].username", is("user2")))
                 .andExpect(jsonPath("$[1].email", is("user2@example.com")))
-                .andExpect(jsonPath("$[1].role", is("ADMIN")));
+                .andExpect(jsonPath("$[1].role", is("ADMIN")))
+                .andExpect(jsonPath("$[0].password").doesNotExist());
     }
 
     // POST /api/admin/promote/{id}
@@ -115,6 +116,7 @@ public class AdminControllerTest {
         when(userRepository.findById("999")).thenReturn(Optional.empty());
 
         mockMvc.perform(post("/api/admin/promote/{id}", "999").with(csrf()))
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("User not found")));
     }
 
@@ -148,6 +150,7 @@ public class AdminControllerTest {
         when(userRepository.findById("321")).thenReturn(Optional.empty());
 
         mockMvc.perform(post("/api/admin/revoke/321", "321").with(csrf()))
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("User not found")));
     }
     // DELETE /api/admin/users/{id}
@@ -209,6 +212,7 @@ public class AdminControllerTest {
         when(userRepository.findById("99")).thenReturn(Optional.empty());
 
         mockMvc.perform(post("/api/admin/impersonate/{id}", "99").with(csrf()))
+                .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("User not found")));
     }
 
@@ -251,6 +255,7 @@ public class AdminControllerTest {
         mockMvc.perform(post("/api/admin/create").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
+                .andExpect(status().isConflict())
                 .andExpect(content().string(containsString("Username already exists")));
     }
 }

@@ -86,6 +86,16 @@ public class RebrickableApiClient {
         T get();
     }
 
+    private String withoutApiKey(String url) {
+        if (url == null) {
+            return null;
+        }
+        return UriComponentsBuilder.fromUriString(url)
+                .replaceQueryParam("key")
+                .build()
+                .toUriString();
+    }
+
     public Set getSetDetails(String setNum) {
         logger.info("Fetching set details for set number: {}", setNum);
         try {
@@ -94,7 +104,7 @@ public class RebrickableApiClient {
                     .queryParam("key", apiKey)
                     .build()
                     .toUriString();
-            logger.info("Requesting set details from URL: {}", url);
+            logger.info("Requesting set details from URL: {}", withoutApiKey(url));
             Set result = restTemplate.getForObject(url, Set.class);
             logger.debug("Successfully retrieved set details for set number: {}", setNum);
             return result;
@@ -127,16 +137,16 @@ public class RebrickableApiClient {
         }
 
         String url = builder.build().toUriString();
-        logger.info("Requesting searchSets URL: {}", url);
+        logger.info("Requesting searchSets URL: {}", withoutApiKey(url));
 
         return executeWithRetry(() -> {
             RebrickableResponse response = restTemplate.getForObject(url, RebrickableResponse.class);
             if (response != null) {
                 if (response.getNext() != null) {
-                    response.setNext(response.getNext().replace(baseUrl + "/lego/sets/", "/api/rebrickable/sets/search"));
+                    response.setNext(withoutApiKey(response.getNext()).replace(baseUrl + "/lego/sets/", "/api/rebrickable/sets/search"));
                 }
                 if (response.getPrevious() != null) {
-                    response.setPrevious(response.getPrevious().replace(baseUrl + "/lego/sets/", "/api/rebrickable/sets/search"));
+                    response.setPrevious(withoutApiKey(response.getPrevious()).replace(baseUrl + "/lego/sets/", "/api/rebrickable/sets/search"));
                 }
             }
             logger.debug("Received searchSets response: {}", response);
@@ -151,9 +161,13 @@ public class RebrickableApiClient {
                 .queryParam("key", apiKey)
                 .build()
                 .toUriString();
-        logger.info("Requesting set parts URL: {}", url);
+        logger.info("Requesting set parts URL: {}", withoutApiKey(url));
         return executeWithRetry(() -> {
             RebrickablePartResponse response = restTemplate.getForObject(url, RebrickablePartResponse.class);
+            if (response != null) {
+                response.setNext(withoutApiKey(response.getNext()));
+                response.setPrevious(withoutApiKey(response.getPrevious()));
+            }
             logger.debug("Received set parts response: {}", response);
             return response;
         });

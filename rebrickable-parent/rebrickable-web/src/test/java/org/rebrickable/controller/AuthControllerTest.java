@@ -2,6 +2,7 @@ package org.rebrickable.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -72,7 +73,8 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.id", is("1")))
                 .andExpect(jsonPath("$.username", is("testUser")))
                 .andExpect(jsonPath("$.email", is("test@example.com")))
-                .andExpect(jsonPath("$.role", is("USER")));
+                .andExpect(jsonPath("$.role", is("USER")))
+                .andExpect(jsonPath("$.password").doesNotExist());
     }
 
     @Test
@@ -87,7 +89,8 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Database error")));
+                .andExpect(content().string("An unexpected error occurred."))
+                .andExpect(content().string(not(containsString("Database error"))));
     }
 
     @Test
@@ -138,7 +141,8 @@ public class AuthControllerTest {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(content().string(containsString("Authentication failed")));
+                .andExpect(content().string("An unexpected error occurred."))
+                .andExpect(content().string(not(containsString("Authentication failed"))));
     }
 
     @Test
@@ -166,6 +170,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("User not found")));
+                .andExpect(content().string("An unexpected error occurred."))
+                .andExpect(content().string(not(containsString("User not found"))));
     }
 }
