@@ -7,17 +7,12 @@ import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.rebrickable.Set;
 import org.rebrickable.repository.SetRepository;
-import org.rebrickable.config.GlobalExceptionHandler;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.*;
 
-@SpringBootTest
-@Import({GlobalExceptionHandler.class, UserCollectionController.class})
 public class UserCollectionControllerTest {
 
     @Mock

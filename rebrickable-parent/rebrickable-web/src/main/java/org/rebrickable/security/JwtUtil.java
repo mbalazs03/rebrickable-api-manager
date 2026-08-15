@@ -18,10 +18,10 @@ import java.util.function.Function;
 public class JwtUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    @Value("${rebrickable.secret.key2}")
+    @Value("${rebrickable.jwt.secret}")
     private String SECRET_KEY;
 
-    @Value("${rebrickable.expiration}")
+    @Value("${rebrickable.jwt.expiration}")
     private long EXPIRATION_TIME;
 
     private Key getSigningKey() {

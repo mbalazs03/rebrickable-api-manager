@@ -8,10 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.rebrickable.*;
 import org.rebrickable.Set;
-import org.rebrickable.config.GlobalExceptionHandler;
 import org.rebrickable.service.RebrickableService;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,8 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.*;
 
-@SpringBootTest
-@Import({GlobalExceptionHandler.class, RebrickableController.class})
 public class RebrickableControllerTest {
 
     @Mock

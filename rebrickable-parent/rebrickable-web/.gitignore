@@ -39,6 +39,9 @@ build/
 
 .env
 
-application.properties
+# The committed application.properties holds no secrets, only ${ENV_VAR}
+# placeholders. Local overrides belong in these files instead.
+application-local.properties
+application-*.local.properties
 
 uploads/
