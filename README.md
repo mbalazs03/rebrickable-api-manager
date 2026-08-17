@@ -1,4 +1,4 @@
-# Brickset API Manager
+# Rebrickable API Manager
 
 LEGO set collection manager. Spring Boot backend proxying the [Rebrickable API v3](https://rebrickable.com/api/v3), collections in MongoDB, React SPA on top.
 
