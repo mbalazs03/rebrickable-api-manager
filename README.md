@@ -2,6 +2,7 @@
 
 LEGO set collection manager. Spring Boot backend proxying the [Rebrickable API v3](https://rebrickable.com/api/v3), collections in MongoDB, React SPA on top.
 
+[![CI](https://github.com/mbalazs03/rebrickable-api-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/mbalazs03/rebrickable-api-manager/actions/workflows/ci.yml)
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.1-6DB33F?logo=springboot&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?logo=mongodb&logoColor=white)
